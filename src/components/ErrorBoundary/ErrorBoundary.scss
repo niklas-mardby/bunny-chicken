@@ -1,0 +1,78 @@
+.error-boundary {
+	padding: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 300px;
+
+	&__content {
+		background-color: #fff;
+		padding: 2rem;
+		border-radius: 1rem;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		max-width: 600px;
+		width: 100%;
+		text-align: center;
+	}
+
+	&__title {
+		font-size: 1.5rem;
+		color: #e74c3c;
+		margin-bottom: 1rem;
+	}
+
+	&__message {
+		font-size: 1rem;
+		line-height: 1.5;
+		color: #555;
+		margin-bottom: 1.5rem;
+	}
+
+	&__details {
+		background-color: #f8f9fa;
+		padding: 1rem;
+		border-radius: 0.5rem;
+		margin-bottom: 1.5rem;
+		text-align: left;
+
+		summary {
+			cursor: pointer;
+			font-weight: 500;
+			color: #666;
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	&__error-message {
+		color: #e74c3c;
+		font-family: monospace;
+		margin-bottom: 0.5rem;
+	}
+
+	&__stack {
+		font-size: 0.85rem;
+		line-height: 1.4;
+		color: #666;
+		max-height: 200px;
+		overflow-y: auto;
+		background-color: #f1f1f1;
+		padding: 0.75rem;
+		border-radius: 0.25rem;
+		white-space: pre-wrap;
+	}
+
+	&__button {
+		background-color: #6c5ce7;
+		color: white;
+		border: none;
+		border-radius: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		font-size: 1rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+
+		&:hover {
+			background-color: #5f4dd0;
+		}
+	}
+}

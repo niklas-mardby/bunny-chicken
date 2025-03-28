@@ -1,0 +1,48 @@
+// Färger
+$primary-color: #6c5ce7;
+$primary-light: #8976fa;
+$primary-dark: #5f4dd0;
+
+$secondary-color: #fd79a8;
+$secondary-light: #fda7c9;
+$secondary-dark: #e05c8b;
+
+$background-color: #f8faff;
+$surface-color: #ffffff;
+
+$text-primary: #333333;
+$text-secondary: #666666;
+$text-muted: #888888;
+
+$error-color: #d32f2f;
+$success-color: #32a852;
+
+// Typografi
+$font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+$font-size-base: 16px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+$font-weight-extra-bold: 700;
+
+// Layout
+$spacing-small: 0.5rem;
+$spacing-medium: 1rem;
+$spacing-large: 1.5rem;
+$spacing-xlarge: 2rem;
+$spacing-xxlarge: 3rem;
+
+$border-radius-small: 0.25rem;
+$border-radius-medium: 0.5rem;
+$border-radius-large: 1rem;
+
+// Skuggor
+$shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+$shadow-large: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
