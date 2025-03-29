@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import { Pattern, StripeDirection, StripeStyle } from "../../types";
+import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
 import "./PatternSelector.scss";
 
-const PatternSelector = () => {
+const PatternSelector: React.FC = () => {
 	const {
 		design,
 		setPattern,
@@ -124,42 +125,31 @@ const PatternSelector = () => {
 			{design.patternSettings.pattern === "dots" && (
 				<div className="pattern-selector__settings">
 					<div className="pattern-selector__setting">
-						<label className="pattern-selector__label" htmlFor="dotSize">
-							Storlek på prickar
-						</label>
-						<input
+						<SliderWithTooltip
 							id="dotSize"
-							type="range"
-							min="2"
-							max="10"
+							label="Storlek på prickar"
+							min={2}
+							max={10}
 							value={dotSize}
 							onChange={(e) => setDotSize(parseInt(e.target.value))}
-							onMouseUp={handleDotSettingsChange}
-							onTouchEnd={handleDotSettingsChange}
-							className="pattern-selector__slider"
-							placeholder="Prickstorlek"
+							onChangeComplete={handleDotSettingsChange}
+							tooltipFormatter={(value) => `${value}px`}
 						/>
 					</div>
 
 					<div className="pattern-selector__setting">
-						<label
-							className="pattern-selector__label"
-							htmlFor="dotDensity"
-						>
-							Täthet
-						</label>
-						<input
+						<SliderWithTooltip
 							id="dotDensity"
-							type="range"
-							min="0.2"
-							max="1"
-							step="0.1"
+							label="Täthet"
+							min={0.2}
+							max={1}
+							step={0.1}
 							value={dotDensity}
 							onChange={(e) => setDotDensity(parseFloat(e.target.value))}
-							onMouseUp={handleDotSettingsChange}
-							onTouchEnd={handleDotSettingsChange}
-							className="pattern-selector__slider"
-							placeholder="Pricktäthet"
+							onChangeComplete={handleDotSettingsChange}
+							tooltipFormatter={(value) =>
+								`${(parseFloat(value.toString()) * 100).toFixed(0)}%`
+							}
 						/>
 					</div>
 				</div>
@@ -184,9 +174,7 @@ const PatternSelector = () => {
 												name="style"
 												checked={stripeStyle === "straight"}
 												onChange={() => {
-													console.log("Style changed to straight");
 													setStripeStyle("straight");
-													// Använd direkt anrop
 													updateStripeSettings(
 														stripeCount,
 														stripeDirection,
@@ -210,9 +198,7 @@ const PatternSelector = () => {
 												name="style"
 												checked={stripeStyle === "zigzag"}
 												onChange={() => {
-													console.log("Style changed to zigzag");
 													setStripeStyle("zigzag");
-													// Använd direkt anrop
 													updateStripeSettings(
 														stripeCount,
 														stripeDirection,
@@ -236,9 +222,7 @@ const PatternSelector = () => {
 												name="style"
 												checked={stripeStyle === "wavy"}
 												onChange={() => {
-													console.log("Style changed to wavy");
 													setStripeStyle("wavy");
-													// Använd direkt anrop
 													updateStripeSettings(
 														stripeCount,
 														stripeDirection,
@@ -272,11 +256,7 @@ const PatternSelector = () => {
 												name="direction"
 												checked={stripeDirection === "horizontal"}
 												onChange={() => {
-													console.log(
-														"Direction changed to horizontal"
-													);
 													setStripeDirection("horizontal");
-													// Använd direkt anrop istället för att förlita sig på stripeDirection som kanske inte uppdaterats än
 													updateStripeSettings(
 														stripeCount,
 														"horizontal",
@@ -300,11 +280,7 @@ const PatternSelector = () => {
 												name="direction"
 												checked={stripeDirection === "vertical"}
 												onChange={() => {
-													console.log(
-														"Direction changed to vertical"
-													);
 													setStripeDirection("vertical");
-													// Använd direkt anrop
 													updateStripeSettings(
 														stripeCount,
 														"vertical",
@@ -328,11 +304,7 @@ const PatternSelector = () => {
 												name="direction"
 												checked={stripeDirection === "diagonal"}
 												onChange={() => {
-													console.log(
-														"Direction changed to diagonal"
-													);
 													setStripeDirection("diagonal");
-													// Använd direkt anrop
 													updateStripeSettings(
 														stripeCount,
 														"diagonal",
@@ -355,28 +327,18 @@ const PatternSelector = () => {
 
 						{/* Antal ränder slider under de andra kontrollerna */}
 						<div className="pattern-selector__stripes-count">
-							<div className="pattern-selector__setting">
-								<label
-									className="pattern-selector__label"
-									htmlFor="stripeCount"
-								>
-									Antal ränder
-								</label>
-								<input
-									id="stripeCount"
-									type="range"
-									min="2"
-									max="12"
-									value={stripeCount}
-									onChange={(e) =>
-										setStripeCount(parseInt(e.target.value))
-									}
-									onMouseUp={handleStripeSettingsChange}
-									onTouchEnd={handleStripeSettingsChange}
-									className="pattern-selector__slider"
-									placeholder="Antal ränder"
-								/>
-							</div>
+							<SliderWithTooltip
+								id="stripeCount"
+								label="Antal ränder"
+								min={2}
+								max={12}
+								value={stripeCount}
+								onChange={(e) =>
+									setStripeCount(parseInt(e.target.value))
+								}
+								onChangeComplete={handleStripeSettingsChange}
+								tooltipFormatter={(value) => `${value} st`}
+							/>
 						</div>
 					</div>
 				</div>
@@ -385,25 +347,17 @@ const PatternSelector = () => {
 			{design.patternSettings.pattern === "checkered" && (
 				<div className="pattern-selector__settings">
 					<div className="pattern-selector__setting">
-						<label
-							className="pattern-selector__label"
-							htmlFor="checkeredSize"
-						>
-							Rutstorlek
-						</label>
-						<input
+						<SliderWithTooltip
 							id="checkeredSize"
-							type="range"
-							min="10"
-							max="40"
+							label="Rutstorlek"
+							min={10}
+							max={40}
 							value={checkeredSize}
 							onChange={(e) =>
 								setCheckeredSize(parseInt(e.target.value))
 							}
-							onMouseUp={handleCheckeredSettingsChange}
-							onTouchEnd={handleCheckeredSettingsChange}
-							className="pattern-selector__slider"
-							placeholder="Rutstorlek"
+							onChangeComplete={handleCheckeredSettingsChange}
+							tooltipFormatter={(value) => `${value}px`}
 						/>
 					</div>
 				</div>
