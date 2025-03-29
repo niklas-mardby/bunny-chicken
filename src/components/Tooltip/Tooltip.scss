@@ -1,10 +1,10 @@
 @use "../../assets/styles/index" as *;
 
 .tooltip {
-	position: fixed; // Fixed position is needed to position precisely at x, y coordinates
+	position: fixed;
 	z-index: 1000;
 	padding: 0;
-	pointer-events: none; // Prevents tooltip from interfering with mouse events
+	pointer-events: none;
 	opacity: 0;
 	transform: translateY(8px);
 	transition: opacity 0.2s ease, transform 0.2s ease;
@@ -25,49 +25,53 @@
 		text-align: center;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 		min-width: 1.5rem;
+		position: relative; /* Viktigt för att positionera pilen relativt till innehållet */
+
+		/* Skapa pilen som ett pseudo-element direkt på innehållet istället */
+		&::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 0;
+			border-style: solid;
+		}
 	}
 
-	&__arrow {
-		position: absolute;
-		width: 0;
-		height: 0;
-		border-style: solid;
+	/* Positionering för olika pilriktningar med ::after på content-elementet */
+	&--top &__content::after {
+		bottom: -8px; /* Lite längre ner för att ta bort mellanrum */
+		left: 50%;
+		transform: translateX(-50%);
+		border-width: 8px 8px 0;
+		border-color: $primary-dark transparent transparent transparent;
+	}
 
-		&--top {
-			bottom: -4px;
-			left: 50%;
-			transform: translateX(-50%);
-			border-width: 4px 4px 0;
-			border-color: $primary-dark transparent transparent transparent;
-		}
+	&--right &__content::after {
+		left: -8px;
+		top: 50%;
+		transform: translateY(-50%);
+		border-width: 8px 8px 8px 0;
+		border-color: transparent $primary-dark transparent transparent;
+	}
 
-		&--right {
-			left: -4px;
-			top: 50%;
-			transform: translateY(-50%);
-			border-width: 4px 4px 4px 0;
-			border-color: transparent $primary-dark transparent transparent;
-		}
+	&--bottom &__content::after {
+		top: -8px;
+		left: 50%;
+		transform: translateX(-50%);
+		border-width: 0 8px 8px 8px;
+		border-color: transparent transparent $primary-dark transparent;
+	}
 
-		&--bottom {
-			top: -4px;
-			left: 50%;
-			transform: translateX(-50%);
-			border-width: 0 4px 4px 4px;
-			border-color: transparent transparent $primary-dark transparent;
-		}
-
-		&--left {
-			right: -4px;
-			top: 50%;
-			transform: translateY(-50%);
-			border-width: 4px 0 4px 4px;
-			border-color: transparent transparent transparent $primary-dark;
-		}
+	&--left &__content::after {
+		right: -8px;
+		top: 50%;
+		transform: translateY(-50%);
+		border-width: 8px 0 8px 8px;
+		border-color: transparent transparent transparent $primary-dark;
 	}
 }
 
-// Animation keyframes
+/* Animation keyframes */
 @keyframes tooltipFadeIn {
 	from {
 		opacity: 0;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import { Pattern, StripeDirection, StripeStyle } from "../../types";
 import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
+import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./PatternSelector.scss";
 
 const PatternSelector: React.FC = () => {
@@ -124,20 +125,18 @@ const PatternSelector: React.FC = () => {
 			{/* Visa inställningar baserat på valt mönster */}
 			{design.patternSettings.pattern === "dots" && (
 				<div className="pattern-selector__settings">
-					<div className="pattern-selector__setting">
+					<SliderWithTooltipGroup>
 						<SliderWithTooltip
 							id="dotSize"
 							label="Storlek på prickar"
 							min={2}
-							max={10}
+							max={15}
 							value={dotSize}
 							onChange={(e) => setDotSize(parseInt(e.target.value))}
 							onChangeComplete={handleDotSettingsChange}
 							tooltipFormatter={(value) => `${value}px`}
 						/>
-					</div>
 
-					<div className="pattern-selector__setting">
 						<SliderWithTooltip
 							id="dotDensity"
 							label="Täthet"
@@ -151,7 +150,7 @@ const PatternSelector: React.FC = () => {
 								`${(parseFloat(value.toString()) * 100).toFixed(0)}%`
 							}
 						/>
-					</div>
+					</SliderWithTooltipGroup>
 				</div>
 			)}
 
@@ -327,18 +326,20 @@ const PatternSelector: React.FC = () => {
 
 						{/* Antal ränder slider under de andra kontrollerna */}
 						<div className="pattern-selector__stripes-count">
-							<SliderWithTooltip
-								id="stripeCount"
-								label="Antal ränder"
-								min={2}
-								max={12}
-								value={stripeCount}
-								onChange={(e) =>
-									setStripeCount(parseInt(e.target.value))
-								}
-								onChangeComplete={handleStripeSettingsChange}
-								tooltipFormatter={(value) => `${value} st`}
-							/>
+							<SliderWithTooltipGroup>
+								<SliderWithTooltip
+									id="stripeCount"
+									label="Antal ränder"
+									min={2}
+									max={12}
+									value={stripeCount}
+									onChange={(e) =>
+										setStripeCount(parseInt(e.target.value))
+									}
+									onChangeComplete={handleStripeSettingsChange}
+									tooltipFormatter={(value) => `${value} st`}
+								/>
+							</SliderWithTooltipGroup>
 						</div>
 					</div>
 				</div>
@@ -346,7 +347,7 @@ const PatternSelector: React.FC = () => {
 
 			{design.patternSettings.pattern === "checkered" && (
 				<div className="pattern-selector__settings">
-					<div className="pattern-selector__setting">
+					<SliderWithTooltipGroup>
 						<SliderWithTooltip
 							id="checkeredSize"
 							label="Rutstorlek"
@@ -359,7 +360,7 @@ const PatternSelector: React.FC = () => {
 							onChangeComplete={handleCheckeredSettingsChange}
 							tooltipFormatter={(value) => `${value}px`}
 						/>
-					</div>
+					</SliderWithTooltipGroup>
 				</div>
 			)}
 		</div>

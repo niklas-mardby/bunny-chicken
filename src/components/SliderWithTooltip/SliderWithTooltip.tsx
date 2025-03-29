@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import Tooltip from "../Tooltip/Tooltip";
+import { useTooltipGroup } from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./SliderWithTooltip.scss";
 
 interface SliderWithTooltipProps {
@@ -33,7 +34,20 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 	tooltipFormatter,
 	disabled = false,
 }) => {
-	const [isDragging, setIsDragging] = useState(false);
+	// Get unique ID for this slider if not provided
+	const generatedId = useId();
+	const sliderId = id || generatedId;
+
+	// Use the tooltip group context
+	const {
+		activeSlider,
+		activateSlider,
+		registerCallback,
+		unregisterCallback,
+	} = useTooltipGroup();
+	const isActive = activeSlider === sliderId;
+
+	// Track thumb position for tooltip placement
 	const [thumbPosition, setThumbPosition] = useState({ x: 0, y: 0 });
 	const sliderRef = useRef<HTMLInputElement>(null);
 
@@ -71,17 +85,17 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 		setThumbPosition({ x: thumbX, y: thumbY });
 	};
 
-	// Update thumb position when value changes
+	// Update thumb position when value changes during active dragging
 	useEffect(() => {
-		if (isDragging && showTooltip) {
+		if (isActive && showTooltip) {
 			calculateThumbPosition();
 		}
-	}, [value, isDragging, showTooltip]);
+	}, [value, isActive, showTooltip]);
 
 	// Handle window resize
 	useEffect(() => {
 		const handleResize = () => {
-			if (isDragging && showTooltip) {
+			if (isActive && showTooltip) {
 				calculateThumbPosition();
 			}
 		};
@@ -90,36 +104,32 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 		return () => {
 			window.removeEventListener("resize", handleResize);
 		};
-	}, [isDragging, showTooltip]);
+	}, [isActive, showTooltip]);
 
-	// Handle mouse/touch events
+	// Register the callback when component mounts or when onChangeComplete changes
+	useEffect(() => {
+		if (onChangeComplete) {
+			registerCallback(sliderId, onChangeComplete);
+		}
+
+		// Clean up when component unmounts
+		return () => {
+			unregisterCallback(sliderId);
+		};
+	}, [sliderId, onChangeComplete, registerCallback, unregisterCallback]);
+
+	// Handle mouse/touch start event
 	const handleMouseDown = () => {
-		setIsDragging(true);
+		if (disabled) return;
+
+		activateSlider(sliderId);
 		calculateThumbPosition();
 	};
-
-	const handleMouseUp = () => {
-		setIsDragging(false);
-		if (onChangeComplete) {
-			onChangeComplete();
-		}
-	};
-
-	useEffect(() => {
-		// Add global event listeners for mouseup/touchend
-		document.addEventListener("mouseup", handleMouseUp);
-		document.addEventListener("touchend", handleMouseUp);
-
-		return () => {
-			document.removeEventListener("mouseup", handleMouseUp);
-			document.removeEventListener("touchend", handleMouseUp);
-		};
-	}, [onChangeComplete]);
 
 	return (
 		<div className={`slider-with-tooltip ${className}`}>
 			{label && (
-				<label htmlFor={id} className="slider-with-tooltip__label">
+				<label htmlFor={sliderId} className="slider-with-tooltip__label">
 					{label}
 				</label>
 			)}
@@ -127,7 +137,7 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 			<div className="slider-with-tooltip__container">
 				<input
 					ref={sliderRef}
-					id={id}
+					id={sliderId}
 					type="range"
 					min={min}
 					max={max}
@@ -141,7 +151,7 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 					disabled={disabled}
 				/>
 
-				{isDragging && showTooltip && (
+				{isActive && showTooltip && (
 					<Tooltip
 						x={thumbPosition.x}
 						y={thumbPosition.y}

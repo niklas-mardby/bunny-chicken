@@ -1,0 +1,31 @@
+@use "../../assets/styles/index" as *;
+
+.slider-with-tooltip-group {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-medium;
+	width: 100%;
+
+	// Om du skulle vilja ha en variant som visar gruppen horisontellt
+	&--horizontal {
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		@media (max-width: $breakpoint-md) {
+			flex-direction: column;
+		}
+	}
+
+	// Optional styling for group container
+	&__container {
+		width: 100%;
+	}
+
+	// Optional title for slider groups
+	&__title {
+		font-size: 1rem;
+		font-weight: $font-weight-medium;
+		color: $text-primary;
+		margin-bottom: $spacing-small;
+	}
+}
