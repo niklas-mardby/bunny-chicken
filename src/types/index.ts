@@ -1,5 +1,5 @@
 // Typer för olika mönster
-export type Pattern = "solid" | "dots" | "stripes" | "checkered";
+export type Pattern = "solid" | "dots" | "stripes" | "checkered" | "gradient";
 
 // Riktning för ränder
 export type StripeDirection = "horizontal" | "vertical" | "diagonal";
@@ -7,10 +7,12 @@ export type StripeDirection = "horizontal" | "vertical" | "diagonal";
 // Stil för ränder
 export type StripeStyle = "straight" | "zigzag" | "wavy";
 
-// Interfacen för färger
+// Interfacen för färger (utökad med stöd för fler färger)
 export interface ColorScheme {
 	primary: string;
 	secondary: string;
+	tertiary?: string; // Tillägg för tredje färg
+	quaternary?: string; // Tillägg för fjärde färg
 }
 
 // Interface för olika mönsterinställningar
@@ -29,6 +31,11 @@ export interface PatternSettings {
 	};
 	checkered?: {
 		size: number;
+	};
+	gradient?: {
+		direction: string; // t.ex. "linear" eller "radial"
+		angle?: number; // För linjära gradienter
+		type?: string; // För radiella gradienter ("circle", "ellipse")
 	};
 }
 

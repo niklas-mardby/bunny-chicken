@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import ColorPicker from "../ColorPicker/ColorPicker";
+import ImprovedColorPicker from "../ImprovedColorPicker/ImprovedColorPicker";
 import PatternSelector from "../PatternSelector/PatternSelector";
 import MessageInput from "../MessageInput/MessageInput";
 import ShareButton from "../ShareButton/ShareButton";
@@ -32,7 +32,7 @@ const TabbedControlPanel = () => {
 			case "pattern":
 				return <PatternSelector />;
 			case "color":
-				return <ColorPicker />;
+				return <ImprovedColorPicker />;
 			case "emoji":
 				return <EmojiSelector />;
 			case "message":

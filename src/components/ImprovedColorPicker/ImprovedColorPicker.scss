@@ -1,0 +1,186 @@
+@use "../../assets/styles/index" as *;
+
+.improved-color-picker {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-medium;
+
+	// Färgväljar-rutan
+	&__selectors {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem; // Mindre mellanrum mellan färgväljarna
+		width: 100%;
+	}
+
+	&__selector {
+		flex: 0 1 auto; // Ändrat från flex: 1 till att bara ta upp nödvändig plats
+		min-width: 80px;
+		max-width: 110px; // Begränsar maxbredden
+		height: 40px;
+		border: 2px solid transparent;
+		border-radius: $border-radius-medium;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		position: relative;
+		overflow: hidden;
+		box-shadow: $shadow-small;
+
+		&:hover {
+			transform: translateY(-2px);
+			box-shadow: $shadow-medium;
+		}
+
+		&--selected {
+			border-color: $primary-color;
+			box-shadow: 0 0 0 2px rgba($primary-color, 0.3), $shadow-small;
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 20px 20px 0;
+				border-color: transparent $primary-color transparent transparent;
+			}
+		}
+	}
+
+	&__selector-label {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		color: white;
+		font-size: 0.7rem; // Lite mindre text
+		padding: 0.15rem 0; // Lite mindre padding
+		text-align: center;
+	}
+
+	// Layout för färgpalett och custom färgväljare
+	&__color-section {
+		display: flex;
+		gap: 0.75rem;
+		margin-top: 0.75rem;
+
+		@media (max-width: $breakpoint-sm) {
+			flex-direction: column;
+		}
+	}
+
+	// Input för manuellt val av färg
+	&__input-group {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem;
+		background-color: $surface-color;
+		border-radius: $border-radius-medium;
+		box-shadow: $shadow-small;
+		border: 1px solid $primary-light;
+		width: 80px; // Fast bredd som matchar höjden
+		height: auto; // Anpassar sig efter innehållet
+		flex-shrink: 0; // Förhindra att den krymper
+	}
+
+	&__color-input {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 50px;
+		height: 50px;
+		border: none;
+		border-radius: 0.25rem;
+		cursor: pointer;
+		margin-bottom: 0.25rem;
+
+		&::-webkit-color-swatch-wrapper {
+			padding: 0;
+		}
+
+		&::-webkit-color-swatch {
+			border: none;
+			border-radius: 0.25rem;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+		}
+	}
+
+	&__color-code {
+		font-size: 0.75rem;
+		color: $text-secondary;
+		font-family: monospace;
+		text-align: center;
+	}
+
+	// Färgpaletten
+	&__palette {
+		display: grid;
+		grid-template-columns: repeat(
+			5,
+			1fr
+		); // Minskat till 5 kolumner eftersom vi nu har en ruta bredvid
+		gap: 0.35rem; // Mindre mellanrum
+		padding: 0.75rem;
+		background-color: $surface-color;
+		border-radius: $border-radius-medium;
+		box-shadow: $shadow-small;
+		flex-grow: 1; // Ta upp tillgängligt utrymme
+
+		@media (max-width: $breakpoint-sm) {
+			grid-template-columns: repeat(5, 1fr);
+		}
+	}
+
+	&__color-swatch {
+		width: 100%;
+		height: 25px; // Fast höjd istället för aspect-ratio
+		max-width: 25px; // Begränsa maxbredd
+		border: none;
+		border-radius: 0.25rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+		&:hover {
+			transform: scale(1.1);
+			z-index: 1;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+		}
+
+		&--selected {
+			box-shadow: 0 0 0 2px $primary-color, 0 2px 5px rgba(0, 0, 0, 0.2);
+			z-index: 2;
+		}
+	}
+}
+
+// Responsiv design för mindre skärmar
+@media (max-width: $breakpoint-sm) {
+	.improved-color-picker {
+		&__selectors {
+			display: flex; // Behåll flex istället för grid
+		}
+
+		&__selector {
+			min-width: 70px;
+		}
+
+		&__palette {
+			grid-template-columns: repeat(5, 1fr);
+
+			// Centrera färgrutorna på små skärmar
+			justify-items: center;
+		}
+
+		&__color-swatch {
+			max-width: 25px;
+			height: 25px;
+		}
+	}
+}
