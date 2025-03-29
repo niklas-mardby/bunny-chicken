@@ -1,10 +1,11 @@
+// Stilar för den tabbade kontrollpanelen
 .control-panel {
 	background-color: #fff;
 	border-radius: 1rem;
 	padding: 1.5rem;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	width: 100%;
-	max-width: 400px;
+	max-width: 600px; // Ökad från 400px för att göra panelen bredare
 
 	&__title {
 		font-size: 1.5rem;
@@ -20,6 +21,7 @@
 		margin-bottom: 1.5rem;
 		overflow-x: auto;
 		scrollbar-width: none; // För Firefox
+		width: 100%; // Se till att tabbarna tar upp hela bredden
 
 		&::-webkit-scrollbar {
 			display: none; // För Chrome, Safari och Opera
@@ -27,6 +29,7 @@
 	}
 
 	&__tab {
+		flex: 1; // Gör att varje tabb tar upp lika mycket plats
 		padding: 0.75rem 1rem;
 		border: none;
 		background: none;
@@ -34,8 +37,8 @@
 		font-size: 0.9rem;
 		cursor: pointer;
 		transition: all 0.2s ease;
-		flex-shrink: 0;
 		position: relative;
+		text-align: center; // Centrera texten i tabben
 
 		&:hover {
 			color: #6c5ce7;
@@ -58,7 +61,7 @@
 	}
 
 	&__content {
-		min-height: 200px;
+		min-height: 150px; // Minskad för att minska höjden på panelen
 		margin-bottom: 1.5rem;
 	}
 
@@ -106,27 +109,46 @@
 	}
 }
 
-// Optimering för ColorPicker-komponent
-// Du kan placera detta i ColorPicker.scss
-.color-picker {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 0.5rem;
+// Optimera layout för mönsterväljaren
+.pattern-selector {
+	&__options {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr); // Ändrat från 2 till 4 kolumner
+		gap: 0.5rem;
 
-	&__color-button {
-		width: 100%;
-		aspect-ratio: 1;
-		border-radius: 0.5rem;
-		border: 1px solid #ddd;
-		cursor: pointer;
-		transition: transform 0.2s ease;
-
-		&:hover {
-			transform: scale(1.05);
+		@media (max-width: 768px) {
+			grid-template-columns: repeat(
+				2,
+				1fr
+			); // Återgå till 2 kolumner på mindre skärmar
 		}
+	}
+}
 
-		&--selected {
-			box-shadow: 0 0 0 2px white, 0 0 0 4px #6c5ce7;
+// Optimera layout för emoji-väljaren
+.emoji-selector {
+	&__palette {
+		display: grid;
+		grid-template-columns: repeat(8, 1fr); // Öka från 5 till 8 kolumner
+		gap: 0.5rem;
+
+		@media (max-width: 768px) {
+			grid-template-columns: repeat(
+				6,
+				1fr
+			); // Färre kolumner på mindre skärmar
 		}
+	}
+
+	&__emoji {
+		font-size: 1rem; // Mindre emojis för att passa i layouten
+	}
+}
+
+// Responsiv design
+@media (max-width: 768px) {
+	.control-panel {
+		max-width: 100%;
+		padding: 1rem;
 	}
 }

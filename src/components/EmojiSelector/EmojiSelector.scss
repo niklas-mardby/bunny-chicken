@@ -1,7 +1,7 @@
 .emoji-selector {
 	&__palette {
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(8, 1fr); // Ändrat från 5 till 8 kolumner
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 	}
@@ -11,7 +11,7 @@
 		border: 1px solid #e0e0e0;
 		border-radius: 0.5rem;
 		padding: 0.5rem;
-		font-size: 1.2rem;
+		font-size: 1.1rem; // Lite mindre än originalet
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -89,12 +89,15 @@
 		padding: 0.75rem;
 		margin-bottom: 1rem;
 		animation: fadeIn 0.3s ease;
+
+		// Gör kontrollerna mer kompakta och sida vid sida
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
 	}
 
 	&__control {
-		margin-bottom: 0.75rem;
-		display: flex;
-		flex-direction: column;
+		margin-bottom: 0.5rem; // Minskad från 0.75rem
 	}
 
 	&__label {
@@ -155,6 +158,7 @@
 		display: flex;
 		gap: 0.5rem;
 		margin-top: 0.5rem;
+		grid-column: span 2; // Spänner över hela bredden
 	}
 
 	&__action-button {
@@ -219,5 +223,26 @@
 	to {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+// Responsiv design för mindre skärmar
+@media (max-width: 768px) {
+	.emoji-selector {
+		&__palette {
+			grid-template-columns: repeat(6, 1fr); // Minska antalet kolumner
+		}
+
+		&__controls {
+			grid-template-columns: 1fr; // Enkelspalt på mindre skärmar
+		}
+	}
+}
+
+@media (max-width: 576px) {
+	.emoji-selector {
+		&__palette {
+			grid-template-columns: repeat(4, 1fr); // Ännu färre kolumner
+		}
 	}
 }
