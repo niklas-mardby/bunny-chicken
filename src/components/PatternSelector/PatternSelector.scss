@@ -1,7 +1,10 @@
 .pattern-selector {
 	&__options {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr); // Ändrat från 2 till 4 kolumner
+		grid-template-columns: repeat(
+			4,
+			1fr
+		); // 4 kolumner för mönsteralternativen
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 	}
@@ -33,20 +36,33 @@
 		border-radius: 0.5rem;
 		padding: 1rem;
 		margin-top: 0.5rem;
+	}
 
-		// Gör inställningarna mer kompakta för att minska höjden
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+	// Ny layout för stripes settings
+	&__stripes-settings {
+		display: flex;
+		flex-direction: column;
 		gap: 1rem;
+	}
 
-		// För mönster som bara har en inställning (som "checkered")
-		&--single {
-			grid-template-columns: 1fr;
-		}
+	&__stripes-top-row {
+		display: flex;
+		gap: 1rem;
+		width: 100%;
+	}
+
+	&__stripes-direction,
+	&__stripes-style {
+		flex: 1; // Fördela utrymmet jämnt
+		min-width: 0; // Tillåt flexbox att krympa under min-content
+	}
+
+	&__stripes-count {
+		width: 100%; // Fyller hela bredden
 	}
 
 	&__setting {
-		margin-bottom: 0.5rem; // Minskad från 1rem
+		margin-bottom: 1rem;
 
 		&:last-child {
 			margin-bottom: 0;
@@ -55,8 +71,8 @@
 
 	&__label {
 		display: block;
-		margin-bottom: 0.3rem; // Minskad från 0.5rem
-		font-size: 0.85rem; // Minskad från 0.9rem
+		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
 		color: #555;
 	}
 
@@ -97,17 +113,17 @@
 
 	&__legend {
 		display: block;
-		margin-bottom: 0.3rem; // Minskad från 0.5rem
-		font-size: 0.85rem; // Minskad från 0.9rem
+		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
 		color: #555;
 		font-weight: normal;
 		padding: 0;
 	}
 
 	&__radio-group {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr); // Ändra från flex till grid
-		gap: 0.5rem; // Minskad från 0.75rem
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
 	}
 
 	&__radio-option {
@@ -116,7 +132,7 @@
 	}
 
 	&__radio-label {
-		font-size: 0.8rem; // Minskad från 0.85rem
+		font-size: 0.85rem;
 		color: #333;
 		cursor: pointer;
 		margin-left: 0.3rem;
@@ -128,14 +144,14 @@
 }
 
 // Responsiv design för mindre skärmar
-@media (max-width: 768px) {
+@media (max-width: 576px) {
 	.pattern-selector {
 		&__options {
-			grid-template-columns: repeat(2, 1fr); // Återgå till 2 kolumner
+			grid-template-columns: repeat(2, 1fr); // 2 kolumner på mindre skärmar
 		}
 
-		&__settings {
-			grid-template-columns: 1fr; // Enkelspalt på mindre skärmar
+		&__stripes-top-row {
+			flex-direction: column; // Stapla riktning och stil på mindre skärmar
 		}
 	}
 }

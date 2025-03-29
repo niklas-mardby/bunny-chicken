@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import { Pattern, StripeDirection, StripeStyle } from "../../types";
 import "./PatternSelector.scss";
 
-const PatternSelector: React.FC = () => {
+const PatternSelector = () => {
 	const {
 		design,
 		setPattern,
@@ -167,197 +167,217 @@ const PatternSelector: React.FC = () => {
 
 			{design.patternSettings.pattern === "stripes" && (
 				<div className="pattern-selector__settings">
-					<div className="pattern-selector__setting">
-						<label
-							className="pattern-selector__label"
-							htmlFor="stripeCount"
-						>
-							Antal ränder
-						</label>
-						<input
-							id="stripeCount"
-							type="range"
-							min="2"
-							max="12"
-							value={stripeCount}
-							onChange={(e) => setStripeCount(parseInt(e.target.value))}
-							onMouseUp={handleStripeSettingsChange}
-							onTouchEnd={handleStripeSettingsChange}
-							className="pattern-selector__slider"
-							placeholder="Antal ränder"
-						/>
-					</div>
+					<div className="pattern-selector__stripes-settings">
+						{/* Översta raden med stil och riktning */}
+						<div className="pattern-selector__stripes-top-row">
+							{/* Stil först */}
+							<div className="pattern-selector__stripes-style">
+								<fieldset className="pattern-selector__fieldset">
+									<legend className="pattern-selector__legend">
+										Stil
+									</legend>
+									<div className="pattern-selector__radio-group">
+										<div className="pattern-selector__radio-option">
+											<input
+												id="styleStraight"
+												type="radio"
+												name="style"
+												checked={stripeStyle === "straight"}
+												onChange={() => {
+													console.log("Style changed to straight");
+													setStripeStyle("straight");
+													// Använd direkt anrop
+													updateStripeSettings(
+														stripeCount,
+														stripeDirection,
+														"straight"
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="styleStraight"
+											>
+												Raka
+											</label>
+										</div>
 
-					<div className="pattern-selector__setting">
-						<fieldset className="pattern-selector__fieldset">
-							<legend className="pattern-selector__legend">
-								Riktning
-							</legend>
-							<div className="pattern-selector__radio-group">
-								<div className="pattern-selector__radio-option">
-									<input
-										id="directionHorizontal"
-										type="radio"
-										name="direction"
-										checked={stripeDirection === "horizontal"}
-										onChange={() => {
-											console.log("Direction changed to horizontal");
-											setStripeDirection("horizontal");
-											// Använd direkt anrop istället för att förlita sig på stripeDirection som kanske inte uppdaterats än
-											updateStripeSettings(
-												stripeCount,
-												"horizontal",
-												stripeStyle
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="directionHorizontal"
-									>
-										Horisontell
-									</label>
-								</div>
+										<div className="pattern-selector__radio-option">
+											<input
+												id="styleZigzag"
+												type="radio"
+												name="style"
+												checked={stripeStyle === "zigzag"}
+												onChange={() => {
+													console.log("Style changed to zigzag");
+													setStripeStyle("zigzag");
+													// Använd direkt anrop
+													updateStripeSettings(
+														stripeCount,
+														stripeDirection,
+														"zigzag"
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="styleZigzag"
+											>
+												Zigzag
+											</label>
+										</div>
 
-								<div className="pattern-selector__radio-option">
-									<input
-										id="directionVertical"
-										type="radio"
-										name="direction"
-										checked={stripeDirection === "vertical"}
-										onChange={() => {
-											console.log("Direction changed to vertical");
-											setStripeDirection("vertical");
-											// Använd direkt anrop
-											updateStripeSettings(
-												stripeCount,
-												"vertical",
-												stripeStyle
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="directionVertical"
-									>
-										Vertikal
-									</label>
-								</div>
-
-								<div className="pattern-selector__radio-option">
-									<input
-										id="directionDiagonal"
-										type="radio"
-										name="direction"
-										checked={stripeDirection === "diagonal"}
-										onChange={() => {
-											console.log("Direction changed to diagonal");
-											setStripeDirection("diagonal");
-											// Använd direkt anrop
-											updateStripeSettings(
-												stripeCount,
-												"diagonal",
-												stripeStyle
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="directionDiagonal"
-									>
-										Diagonal
-									</label>
-								</div>
+										<div className="pattern-selector__radio-option">
+											<input
+												id="styleWavy"
+												type="radio"
+												name="style"
+												checked={stripeStyle === "wavy"}
+												onChange={() => {
+													console.log("Style changed to wavy");
+													setStripeStyle("wavy");
+													// Använd direkt anrop
+													updateStripeSettings(
+														stripeCount,
+														stripeDirection,
+														"wavy"
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="styleWavy"
+											>
+												Vågiga
+											</label>
+										</div>
+									</div>
+								</fieldset>
 							</div>
-						</fieldset>
-					</div>
 
-					<div className="pattern-selector__setting">
-						<fieldset className="pattern-selector__fieldset">
-							<legend className="pattern-selector__legend">Stil</legend>
-							<div className="pattern-selector__radio-group">
-								<div className="pattern-selector__radio-option">
-									<input
-										id="styleStraight"
-										type="radio"
-										name="style"
-										checked={stripeStyle === "straight"}
-										onChange={() => {
-											console.log("Style changed to straight");
-											setStripeStyle("straight");
-											// Använd direkt anrop
-											updateStripeSettings(
-												stripeCount,
-												stripeDirection,
-												"straight"
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="styleStraight"
-									>
-										Raka
-									</label>
-								</div>
+							{/* Sedan riktning */}
+							<div className="pattern-selector__stripes-direction">
+								<fieldset className="pattern-selector__fieldset">
+									<legend className="pattern-selector__legend">
+										Riktning
+									</legend>
+									<div className="pattern-selector__radio-group">
+										<div className="pattern-selector__radio-option">
+											<input
+												id="directionHorizontal"
+												type="radio"
+												name="direction"
+												checked={stripeDirection === "horizontal"}
+												onChange={() => {
+													console.log(
+														"Direction changed to horizontal"
+													);
+													setStripeDirection("horizontal");
+													// Använd direkt anrop istället för att förlita sig på stripeDirection som kanske inte uppdaterats än
+													updateStripeSettings(
+														stripeCount,
+														"horizontal",
+														stripeStyle
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="directionHorizontal"
+											>
+												Horisontell
+											</label>
+										</div>
 
-								<div className="pattern-selector__radio-option">
-									<input
-										id="styleZigzag"
-										type="radio"
-										name="style"
-										checked={stripeStyle === "zigzag"}
-										onChange={() => {
-											console.log("Style changed to zigzag");
-											setStripeStyle("zigzag");
-											// Använd direkt anrop
-											updateStripeSettings(
-												stripeCount,
-												stripeDirection,
-												"zigzag"
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="styleZigzag"
-									>
-										Zigzag
-									</label>
-								</div>
+										<div className="pattern-selector__radio-option">
+											<input
+												id="directionVertical"
+												type="radio"
+												name="direction"
+												checked={stripeDirection === "vertical"}
+												onChange={() => {
+													console.log(
+														"Direction changed to vertical"
+													);
+													setStripeDirection("vertical");
+													// Använd direkt anrop
+													updateStripeSettings(
+														stripeCount,
+														"vertical",
+														stripeStyle
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="directionVertical"
+											>
+												Vertikal
+											</label>
+										</div>
 
-								<div className="pattern-selector__radio-option">
-									<input
-										id="styleWavy"
-										type="radio"
-										name="style"
-										checked={stripeStyle === "wavy"}
-										onChange={() => {
-											console.log("Style changed to wavy");
-											setStripeStyle("wavy");
-											// Använd direkt anrop
-											updateStripeSettings(
-												stripeCount,
-												stripeDirection,
-												"wavy"
-											);
-										}}
-										className="pattern-selector__radio"
-									/>
-									<label
-										className="pattern-selector__radio-label"
-										htmlFor="styleWavy"
-									>
-										Vågiga
-									</label>
-								</div>
+										<div className="pattern-selector__radio-option">
+											<input
+												id="directionDiagonal"
+												type="radio"
+												name="direction"
+												checked={stripeDirection === "diagonal"}
+												onChange={() => {
+													console.log(
+														"Direction changed to diagonal"
+													);
+													setStripeDirection("diagonal");
+													// Använd direkt anrop
+													updateStripeSettings(
+														stripeCount,
+														"diagonal",
+														stripeStyle
+													);
+												}}
+												className="pattern-selector__radio"
+											/>
+											<label
+												className="pattern-selector__radio-label"
+												htmlFor="directionDiagonal"
+											>
+												Diagonal
+											</label>
+										</div>
+									</div>
+								</fieldset>
 							</div>
-						</fieldset>
+						</div>
+
+						{/* Antal ränder slider under de andra kontrollerna */}
+						<div className="pattern-selector__stripes-count">
+							<div className="pattern-selector__setting">
+								<label
+									className="pattern-selector__label"
+									htmlFor="stripeCount"
+								>
+									Antal ränder
+								</label>
+								<input
+									id="stripeCount"
+									type="range"
+									min="2"
+									max="12"
+									value={stripeCount}
+									onChange={(e) =>
+										setStripeCount(parseInt(e.target.value))
+									}
+									onMouseUp={handleStripeSettingsChange}
+									onTouchEnd={handleStripeSettingsChange}
+									className="pattern-selector__slider"
+									placeholder="Antal ränder"
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 			)}
