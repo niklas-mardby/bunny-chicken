@@ -10,14 +10,14 @@ interface TooltipProps {
 	offset?: number;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({
+const Tooltip = ({
 	x,
 	y,
 	children,
 	className = "",
 	position = "top",
 	offset = 10,
-}) => {
+}: TooltipProps) => {
 	const tooltipRef = useRef<HTMLDivElement>(null);
 	const [tooltipSize, setTooltipSize] = useState({ width: 0, height: 0 });
 	const [show, setShow] = useState(false);
@@ -33,7 +33,7 @@ const Tooltip: React.FC<TooltipProps> = ({
 			// Slight delay to trigger animation after initial render
 			const timer = setTimeout(() => {
 				setShow(true);
-			}, 10);
+			}, 12);
 
 			return () => clearTimeout(timer);
 		}
