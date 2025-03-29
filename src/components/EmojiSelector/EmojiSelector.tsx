@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
-import { EmojiDecoration } from "../../types";
 import "./EmojiSelector.scss";
 
-// Lista med påskrelaterade emojis
+// Lista med påskrelaterade och våriga emojis
 const EASTER_EMOJIS = [
 	"🐰",
 	"🐣",
@@ -20,6 +19,24 @@ const EASTER_EMOJIS = [
 	"🍀",
 	"🦋",
 	"🐞",
+	"🐤",
+	"🌈",
+	"🌻",
+	"🌺",
+	"🌹",
+	"🌞",
+	"🐝",
+	"🦔",
+	"🐿️",
+	"🌧️",
+	"🌤️",
+	"🌳",
+	"🦩",
+	"🦚",
+	"🐔",
+	"🐦",
+	"🪶",
+	"🪺",
 ];
 
 const EmojiSelector: React.FC = () => {
@@ -27,99 +44,57 @@ const EmojiSelector: React.FC = () => {
 	const [selectedEmojiIndex, setSelectedEmojiIndex] = useState<number | null>(
 		null
 	);
-	const [emojiSize, setEmojiSize] = useState(30);
-	const [emojiRotation, setEmojiRotation] = useState(0);
-	const [draggedEmoji, setDraggedEmoji] = useState<EmojiDecoration | null>(
-		null
-	);
 
-	// Uppdatera lokala kontroller när vald emoji ändras
-	useEffect(() => {
-		if (
-			selectedEmojiIndex !== null &&
-			design.emojiDecorations[selectedEmojiIndex]
-		) {
-			const emoji = design.emojiDecorations[selectedEmojiIndex];
-			setEmojiSize(emoji.size);
-			setEmojiRotation(emoji.rotation);
-		}
-	}, [selectedEmojiIndex, design.emojiDecorations]);
+	// Calculated current emoji properties from the design state
+	const currentEmoji =
+		selectedEmojiIndex !== null
+			? design.emojiDecorations[selectedEmojiIndex]
+			: null;
 
 	// Hantera klick på en emoji i paletten
-	const handleEmojiClick = useCallback(
-		(emoji: string) => {
-			// Lägg till emoji med standardstorlek, position och rotation
-			// Generera ett unikt ID för varje emoji när den läggs till
-			addEmoji(emoji);
-		},
-		[addEmoji]
-	);
+	const handleEmojiClick = (emoji: string) => {
+		// Kontrollera om max antal emojis är uppnått
+		if (design.emojiDecorations.length >= 5) {
+			return; // Tillåt inte fler än 5 emojis
+		}
+
+		// Lägg till emoji med position mitt på ägget och standardstorlek 50px
+		const xPosition = 50; // Alltid mitt på ägget horisontellt
+		const yPosition = 50; // Alltid mitt på ägget vertikalt
+		addEmoji(emoji, { x: xPosition, y: yPosition }, 50); // Standardstorlek 50px
+	};
 
 	// Hantera val av en befintlig emoji
-	const handleSelectEmoji = useCallback(
-		(index: number) => {
-			if (selectedEmojiIndex === index) {
-				// Avmarkera om redan vald
-				setSelectedEmojiIndex(null);
-			} else {
-				setSelectedEmojiIndex(index);
-			}
-		},
-		[selectedEmojiIndex]
-	);
+	const handleSelectEmoji = (index: number) => {
+		setSelectedEmojiIndex(selectedEmojiIndex === index ? null : index);
+	};
 
 	// Hantera borttagning av vald emoji
-	const handleRemoveEmoji = useCallback(() => {
+	const handleRemoveEmoji = () => {
 		if (selectedEmojiIndex !== null) {
 			removeEmoji(selectedEmojiIndex);
 			setSelectedEmojiIndex(null);
 		}
-	}, [selectedEmojiIndex, removeEmoji]);
+	};
 
 	// Hantera ändring av emojistorlek
-	const handleSizeChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newSize = parseInt(e.target.value);
-			setEmojiSize(newSize);
-
-			if (selectedEmojiIndex !== null) {
-				updateEmoji(selectedEmojiIndex, { size: newSize });
-			}
-		},
-		[selectedEmojiIndex, updateEmoji]
-	);
+	const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (selectedEmojiIndex !== null) {
+			updateEmoji(selectedEmojiIndex, { size: parseInt(e.target.value) });
+		}
+	};
 
 	// Hantera ändring av emojirotation
-	const handleRotationChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newRotation = parseInt(e.target.value);
-			setEmojiRotation(newRotation);
-
-			if (selectedEmojiIndex !== null) {
-				updateEmoji(selectedEmojiIndex, { rotation: newRotation });
-			}
-		},
-		[selectedEmojiIndex, updateEmoji]
-	);
-
-	// Hantera drag-and-drop funktionalitet
-	const handleDragStart = useCallback(
-		(index: number) => {
-			if (index >= 0 && index < design.emojiDecorations.length) {
-				setSelectedEmojiIndex(index);
-				setDraggedEmoji(design.emojiDecorations[index]);
-			}
-		},
-		[design.emojiDecorations]
-	);
-
-	// Hantera när drag-operationen slutar
-	const handleDragEnd = useCallback(() => {
-		setDraggedEmoji(null);
-	}, []);
+	const handleRotationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (selectedEmojiIndex !== null) {
+			updateEmoji(selectedEmojiIndex, {
+				rotation: parseInt(e.target.value),
+			});
+		}
+	};
 
 	// Duplicera en emoji
-	const handleDuplicateEmoji = useCallback(() => {
+	const handleDuplicateEmoji = () => {
 		if (selectedEmojiIndex !== null) {
 			const emojiToDuplicate = design.emojiDecorations[selectedEmojiIndex];
 			const duplicatedEmoji = {
@@ -136,14 +111,14 @@ const EmojiSelector: React.FC = () => {
 				duplicatedEmoji.rotation
 			);
 		}
-	}, [selectedEmojiIndex, design.emojiDecorations, addEmoji]);
+	};
 
 	return (
 		<div className="emoji-selector">
 			<div className="emoji-selector__palette">
 				{EASTER_EMOJIS.map((emoji) => (
 					<button
-						key={emoji} // Använd emojin själv som nyckel eftersom varje emoji är unik i vår lista
+						key={emoji}
 						className="emoji-selector__emoji"
 						onClick={() => handleEmojiClick(emoji)}
 						aria-label={`Lägg till emoji ${emoji}`}
@@ -160,18 +135,15 @@ const EmojiSelector: React.FC = () => {
 					<div className="emoji-selector__emoji-list">
 						{design.emojiDecorations.map((decoration, index) => (
 							<button
-								key={decoration.id} // Använd det unika ID:t som nyckel istället för index
+								key={decoration.id}
 								className={`emoji-selector__active-emoji ${
 									selectedEmojiIndex === index
 										? "emoji-selector__active-emoji--selected"
 										: ""
 								}`}
 								onClick={() => handleSelectEmoji(index)}
-								draggable={true}
-								onDragStart={() => handleDragStart(index)}
-								onDragEnd={handleDragEnd}
 								style={{
-									fontSize: `${Math.min(24, decoration.size / 2)}px`,
+									fontSize: `${Math.min(30, decoration.size / 3)}px`,
 								}}
 								aria-label={`Redigera emoji ${decoration.emoji}`}
 							>
@@ -183,7 +155,7 @@ const EmojiSelector: React.FC = () => {
 			)}
 
 			{/* Kontroller för att redigera vald emoji */}
-			{selectedEmojiIndex !== null && (
+			{currentEmoji && (
 				<div className="emoji-selector__controls">
 					<div className="emoji-selector__control">
 						<label className="emoji-selector__label" htmlFor="emojiSize">
@@ -192,14 +164,16 @@ const EmojiSelector: React.FC = () => {
 						<input
 							id="emojiSize"
 							type="range"
-							min="15"
-							max="50"
-							value={emojiSize}
+							min="20"
+							max="100"
+							value={currentEmoji.size}
 							onChange={handleSizeChange}
 							className="emoji-selector__slider"
 							placeholder="Välj storlek på emoji"
 						/>
-						<span className="emoji-selector__value">{emojiSize}px</span>
+						<span className="emoji-selector__value">
+							{currentEmoji.size}px
+						</span>
 					</div>
 
 					<div className="emoji-selector__control">
@@ -214,13 +188,13 @@ const EmojiSelector: React.FC = () => {
 							type="range"
 							min="0"
 							max="360"
-							value={emojiRotation}
+							value={currentEmoji.rotation}
 							onChange={handleRotationChange}
 							className="emoji-selector__slider"
 							placeholder="Välj rotation på emoji"
 						/>
 						<span className="emoji-selector__value">
-							{emojiRotation}°
+							{currentEmoji.rotation}°
 						</span>
 					</div>
 
@@ -243,16 +217,26 @@ const EmojiSelector: React.FC = () => {
 				</div>
 			)}
 
-			{design.emojiDecorations.length === 0 ? (
+			{design.emojiDecorations.length >= 5 && (
+				<p className="emoji-selector__hint emoji-selector__hint--warning">
+					Du har nått maximalt antal emojis (5 st).
+				</p>
+			)}
+
+			{/* Visa relevant hjälptext baserad på antal emojis */}
+			{design.emojiDecorations.length === 0 && (
 				<p className="emoji-selector__hint">
 					Klicka på en emoji ovan för att lägga till den på ditt ägg!
 				</p>
-			) : (
-				<p className="emoji-selector__hint">
-					Tips: Välj en emoji från listan för att ändra storlek och
-					rotation.
-				</p>
 			)}
+
+			{design.emojiDecorations.length > 0 &&
+				design.emojiDecorations.length < 5 && (
+					<p className="emoji-selector__hint">
+						Tips: Välj en emoji från listan för att ändra storlek och
+						rotation.
+					</p>
+				)}
 		</div>
 	);
 };
