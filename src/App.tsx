@@ -1,10 +1,9 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import "./App.scss";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { EggDesignProvider } from "./context/EggDesignContext";
 
-const App: React.FC = () => {
+const App = () => {
 	return (
 		<div className="app">
 			<ErrorBoundary>
