@@ -1,10 +1,9 @@
-import React from "react";
 import EggCanvas from "../../components/EggCanvas/EggCanvas";
-import ControlPanel from "../../components/ControlPanel/ControlPanel";
 import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
 import "./DesignerPage.scss";
+import TabbedControlPanel from "../../components/TabbedControlPanel/TabbedControlPanel";
 
-const DesignerPage: React.FC = () => {
+const DesignerPage = () => {
 	return (
 		<div className="designer-page">
 			<header className="designer-page__header">
@@ -37,7 +36,7 @@ const DesignerPage: React.FC = () => {
 							</div>
 						}
 					>
-						<ControlPanel />
+						<TabbedControlPanel />
 					</ErrorBoundary>
 				</div>
 			</div>

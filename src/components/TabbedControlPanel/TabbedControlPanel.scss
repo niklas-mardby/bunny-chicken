@@ -1,0 +1,132 @@
+.control-panel {
+	background-color: #fff;
+	border-radius: 1rem;
+	padding: 1.5rem;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 400px;
+
+	&__title {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+		text-align: center;
+		color: #6c5ce7;
+		font-weight: 600;
+	}
+
+	&__tabs {
+		display: flex;
+		border-bottom: 1px solid #e0e0e0;
+		margin-bottom: 1.5rem;
+		overflow-x: auto;
+		scrollbar-width: none; // För Firefox
+
+		&::-webkit-scrollbar {
+			display: none; // För Chrome, Safari och Opera
+		}
+	}
+
+	&__tab {
+		padding: 0.75rem 1rem;
+		border: none;
+		background: none;
+		color: #666;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		flex-shrink: 0;
+		position: relative;
+
+		&:hover {
+			color: #6c5ce7;
+		}
+
+		&--active {
+			color: #6c5ce7;
+			font-weight: 500;
+
+			&::after {
+				content: "";
+				position: absolute;
+				bottom: -1px;
+				left: 0;
+				width: 100%;
+				height: 2px;
+				background-color: #6c5ce7;
+			}
+		}
+	}
+
+	&__content {
+		min-height: 200px;
+		margin-bottom: 1.5rem;
+	}
+
+	&__section-title {
+		font-size: 1.1rem;
+		margin-bottom: 1rem;
+		color: #333;
+		font-weight: 500;
+	}
+
+	&__actions {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 1.5rem;
+	}
+
+	&__reset-button {
+		background-color: #f5f5f5;
+		border: 1px solid #ddd;
+		color: #666;
+		border-radius: 0.5rem;
+		padding: 0.5rem 1rem;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+
+		&:hover {
+			background-color: #e0e0e0;
+		}
+	}
+
+	&__next-button {
+		background-color: #6c5ce7;
+		border: none;
+		color: white;
+		border-radius: 0.5rem;
+		padding: 0.5rem 1.5rem;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+
+		&:hover {
+			background-color: #5549d2;
+		}
+	}
+}
+
+// Optimering för ColorPicker-komponent
+// Du kan placera detta i ColorPicker.scss
+.color-picker {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 0.5rem;
+
+	&__color-button {
+		width: 100%;
+		aspect-ratio: 1;
+		border-radius: 0.5rem;
+		border: 1px solid #ddd;
+		cursor: pointer;
+		transition: transform 0.2s ease;
+
+		&:hover {
+			transform: scale(1.05);
+		}
+
+		&--selected {
+			box-shadow: 0 0 0 2px white, 0 0 0 4px #6c5ce7;
+		}
+	}
+}

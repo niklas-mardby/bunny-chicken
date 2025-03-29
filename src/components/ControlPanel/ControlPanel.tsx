@@ -1,13 +1,15 @@
-import React from "react";
+import { memo } from "react";
 import ColorPicker from "../ColorPicker/ColorPicker";
 import PatternSelector from "../PatternSelector/PatternSelector";
 import MessageInput from "../MessageInput/MessageInput";
 import ShareButton from "../ShareButton/ShareButton";
-import "./ControlPanel.scss";
 import EmojiSelector from "../EmojiSelector/EmojiSelector";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 
-const ControlPanel: React.FC = () => {
+// Style import moved to a separate file that loads this
+// instead of importing it directly here
+
+const ControlPanel = () => {
 	const { resetDesign } = useEggDesigner();
 
 	return (
@@ -52,4 +54,6 @@ const ControlPanel: React.FC = () => {
 	);
 };
 
-export default ControlPanel;
+// Use memo to prevent unnecessary re-renders when parent components update
+// This is beneficial since this component likely doesn't change based on props
+export default memo(ControlPanel);
