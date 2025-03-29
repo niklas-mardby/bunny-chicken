@@ -63,7 +63,7 @@ const EggCanvas: React.FC<EggCanvasProps> = ({ width = 300, height = 400 }) => {
 
 		// Definiera kontrollpunkter för toppen (spetsig del)
 		const topWidth = eggWidth * 0.3; // Ännu smalare i toppen
-		const topHeight = eggHeight * 0.45; // Gör toppen högre/spetsigare
+		// const topHeight = eggHeight * 0.45; // Gör toppen högre/spetsigare
 
 		// Höger sida, övre halvan (spetsig)
 		ctx.bezierCurveTo(
