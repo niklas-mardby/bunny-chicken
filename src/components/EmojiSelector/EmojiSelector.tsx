@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
+import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
+import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./EmojiSelector.scss";
 
 // Lista med påskrelaterade och våriga emojis
@@ -93,6 +95,16 @@ const EmojiSelector: React.FC = () => {
 		}
 	};
 
+	// Hantera klart-händelsen för slidern (för att uppdatera state när användaren slutar dra)
+	const handleSizeChangeComplete = () => {
+		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
+	};
+
+	// Hantera klart-händelsen för rotationslidern
+	const handleRotationChangeComplete = () => {
+		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
+	};
+
 	// Duplicera en emoji
 	const handleDuplicateEmoji = () => {
 		if (selectedEmojiIndex !== null) {
@@ -154,49 +166,32 @@ const EmojiSelector: React.FC = () => {
 				</div>
 			)}
 
-			{/* Kontroller för att redigera vald emoji */}
+			{/* Kontroller för att redigera vald emoji med SliderWithTooltipGroup */}
 			{currentEmoji && (
 				<div className="emoji-selector__controls">
-					<div className="emoji-selector__control">
-						<label className="emoji-selector__label" htmlFor="emojiSize">
-							Storlek
-						</label>
-						<input
+					<SliderWithTooltipGroup>
+						<SliderWithTooltip
 							id="emojiSize"
-							type="range"
-							min="20"
-							max="100"
+							label="Storlek"
+							min={20}
+							max={100}
 							value={currentEmoji.size}
 							onChange={handleSizeChange}
-							className="emoji-selector__slider"
-							placeholder="Välj storlek på emoji"
+							onChangeComplete={handleSizeChangeComplete}
+							tooltipFormatter={(value) => `${value}px`}
 						/>
-						<span className="emoji-selector__value">
-							{currentEmoji.size}px
-						</span>
-					</div>
 
-					<div className="emoji-selector__control">
-						<label
-							className="emoji-selector__label"
-							htmlFor="emojiRotation"
-						>
-							Rotation
-						</label>
-						<input
+						<SliderWithTooltip
 							id="emojiRotation"
-							type="range"
-							min="0"
-							max="360"
+							label="Rotation"
+							min={0}
+							max={360}
 							value={currentEmoji.rotation}
 							onChange={handleRotationChange}
-							className="emoji-selector__slider"
-							placeholder="Välj rotation på emoji"
+							onChangeComplete={handleRotationChangeComplete}
+							tooltipFormatter={(value) => `${value}°`}
 						/>
-						<span className="emoji-selector__value">
-							{currentEmoji.rotation}°
-						</span>
-					</div>
+					</SliderWithTooltipGroup>
 
 					<div className="emoji-selector__buttons">
 						<button
@@ -229,14 +224,6 @@ const EmojiSelector: React.FC = () => {
 					Klicka på en emoji ovan för att lägga till den på ditt ägg!
 				</p>
 			)}
-
-			{design.emojiDecorations.length > 0 &&
-				design.emojiDecorations.length < 5 && (
-					<p className="emoji-selector__hint">
-						Tips: Välj en emoji från listan för att ändra storlek och
-						rotation.
-					</p>
-				)}
 		</div>
 	);
 };
