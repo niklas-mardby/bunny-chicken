@@ -68,6 +68,14 @@
 			transform: scale(1.05);
 		}
 
+		&--selected {
+			border-color: $primary-color;
+			border-width: 2px;
+			background-color: #f1f2ff;
+			box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+			transform: scale(1.05); // Gör den lite större för att framhäva den
+		}
+
 		&__remove {
 			position: absolute;
 			top: -6px;
@@ -115,11 +123,7 @@
 		}
 	}
 
-	&--selected {
-		border-color: $primary-color;
-		background-color: #f1f2ff;
-		box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
-	}
+	/* This class is now properly nested under &__active-emoji */
 
 	/* Knappstilar borttagna */
 

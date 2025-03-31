@@ -1,8 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
 import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./EmojiSelector.scss";
+
+// Maximum number of emojis allowed
+const MAX_EMOJIS = 10;
 
 // Lista med påskrelaterade och våriga emojis
 const EASTER_EMOJIS = [
@@ -54,17 +57,53 @@ const EmojiSelector: React.FC = () => {
 			: null;
 
 	// Hantera klick på en emoji i paletten
-	const handleEmojiClick = (emoji: string) => {
-		// Kontrollera om max antal emojis är uppnått
-		if (design.emojiDecorations.length >= 5) {
-			return; // Tillåt inte fler än 5 emojis
+	const handleEmojiClick = useCallback(
+		(emoji: string) => {
+			// Kontrollera om max antal emojis är uppnått
+			if (design.emojiDecorations.length >= MAX_EMOJIS) {
+				return; // Tillåt inte fler än MAX_EMOJIS emojis
+			}
+
+			// Lägg till emoji med position mitt på ägget och standardstorlek 50px
+			const xPosition = 50; // Alltid mitt på ägget horisontellt
+			const yPosition = 50; // Alltid mitt på ägget vertikalt
+
+			// Lägg till emojin - den automatiska selektionen hanteras i useEffect
+			addEmoji(emoji, { x: xPosition, y: yPosition }, 50); // Standardstorlek 50px
+		},
+		[design.emojiDecorations.length, addEmoji]
+	);
+
+	// Håll koll på antalet emojis för att kunna välja den senast tillagda
+	const previousEmojiCount = React.useRef(design.emojiDecorations.length);
+
+	// Håll koll på förändringar i emoji-arrayen för att hantera ny tillagd emoji
+	useEffect(() => {
+		const currentEmojiCount = design.emojiDecorations.length;
+
+		// Om en ny emoji lagts till (längden har ökat)
+		if (
+			currentEmojiCount > previousEmojiCount.current &&
+			currentEmojiCount > 0
+		) {
+			// Välj den senast tillagda emojin
+			setSelectedEmojiIndex(currentEmojiCount - 1);
+		}
+		// Om alla emojis har tagits bort, återställ valet
+		else if (currentEmojiCount === 0) {
+			setSelectedEmojiIndex(null);
+		}
+		// Om den valda emojin är utanför arrayen, välj den sista
+		else if (
+			selectedEmojiIndex !== null &&
+			selectedEmojiIndex >= currentEmojiCount
+		) {
+			setSelectedEmojiIndex(currentEmojiCount - 1);
 		}
 
-		// Lägg till emoji med position mitt på ägget och standardstorlek 50px
-		const xPosition = 50; // Alltid mitt på ägget horisontellt
-		const yPosition = 50; // Alltid mitt på ägget vertikalt
-		addEmoji(emoji, { x: xPosition, y: yPosition }, 50); // Standardstorlek 50px
-	};
+		// Uppdatera referensvärdet för nästa jämförelse
+		previousEmojiCount.current = currentEmojiCount;
+	}, [design.emojiDecorations.length, selectedEmojiIndex]);
 
 	// Hantera val av en befintlig emoji
 	const handleSelectEmoji = (index: number) => {
@@ -176,7 +215,7 @@ const EmojiSelector: React.FC = () => {
 					<p className="emoji-selector__info-text">Dina emojis:</p>
 					<div className="emoji-selector__emoji-list">
 						{design.emojiDecorations.map((decoration, index) => (
-							<div
+							<button
 								key={decoration.id}
 								className={`emoji-selector__active-emoji ${
 									selectedEmojiIndex === index
@@ -190,15 +229,15 @@ const EmojiSelector: React.FC = () => {
 								aria-label={`Redigera emoji ${decoration.emoji}`}
 							>
 								{decoration.emoji}
-								<div
+								<button
 									className="emoji-selector__active-emoji__remove"
 									onClick={(e) => {
 										e.stopPropagation(); // Förhindra att emoji väljs när man klickar på kryss
 										handleRemoveEmoji(index);
 									}}
 									aria-label={`Ta bort emoji ${decoration.emoji}`}
-								></div>
-							</div>
+								></button>
+							</button>
 						))}
 					</div>
 				</div>
@@ -263,26 +302,18 @@ const EmojiSelector: React.FC = () => {
 				</div>
 			)}
 
-			{design.emojiDecorations.length >= 5 && (
+			{design.emojiDecorations.length >= MAX_EMOJIS && (
 				<p className="emoji-selector__hint emoji-selector__hint--warning">
-					Du har nått maximalt antal emojis (5 st).
+					Du har nått maximalt antal emojis ({MAX_EMOJIS} st).
 				</p>
 			)}
 
-			{/* Visa relevant hjälptext baserad på antal emojis */}
+			{/* Visa hjälptext när inga emojis är tillagda */}
 			{design.emojiDecorations.length === 0 && (
 				<p className="emoji-selector__hint">
 					Klicka på en emoji ovan för att lägga till den på ditt ägg!
 				</p>
 			)}
-
-			{design.emojiDecorations.length > 0 &&
-				design.emojiDecorations.length < 5 && (
-					<p className="emoji-selector__hint">
-						Tips: Välj en emoji från listan för att ändra storlek och
-						rotation.
-					</p>
-				)}
 		</div>
 	);
 };
