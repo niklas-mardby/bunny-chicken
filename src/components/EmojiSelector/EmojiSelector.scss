@@ -68,23 +68,60 @@
 			transform: scale(1.05);
 		}
 
-		&--selected {
-			border-color: $primary-color;
-			background-color: #f1f2ff;
-			box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+		&__remove {
+			position: absolute;
+			top: -6px;
+			right: -6px;
+			width: 16px;
+			height: 16px;
+			background-color: $primary-color;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+			opacity: 0;
+			transform: scale(0.8);
+			transition: opacity 0.2s ease, transform 0.2s ease;
+			z-index: 2;
 
+			&::before,
 			&::after {
 				content: "";
 				position: absolute;
-				top: -4px;
-				right: -4px;
-				width: 10px;
-				height: 10px;
-				background-color: $primary-color;
-				border-radius: 50%;
+				width: 8px;
+				height: 2px;
+				background-color: white;
+				border-radius: 1px;
+			}
+
+			&::before {
+				transform: rotate(45deg);
+			}
+
+			&::after {
+				transform: rotate(-45deg);
+			}
+
+			&:hover {
+				transform: scale(1.1);
+				background-color: $error-color;
 			}
 		}
+
+		&:hover &__remove {
+			opacity: 1;
+			transform: scale(1);
+		}
 	}
+
+	&--selected {
+		border-color: $primary-color;
+		background-color: #f1f2ff;
+		box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+	}
+
+	/* Knappstilar borttagna */
 
 	&__controls {
 		background-color: $surface-color;
@@ -107,52 +144,6 @@
 		}
 	}
 
-	&__buttons {
-		display: flex;
-		gap: 0.5rem;
-		margin-top: 1rem;
-	}
-
-	&__action-button {
-		flex: 1;
-		padding: 0.6rem 0.5rem;
-		border-radius: $border-radius-medium;
-		font-size: 0.85rem;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		&--duplicate {
-			background-color: #e7f5ff;
-			color: #1c7ed6;
-			border: 1px solid #a5d8ff;
-
-			&:hover {
-				background-color: #d0ebff;
-			}
-
-			&:active {
-				background-color: #a5d8ff;
-			}
-		}
-
-		&--remove {
-			background-color: #fff5f5;
-			color: #e03131;
-			border: 1px solid #ffc9c9;
-
-			&:hover {
-				background-color: #ffe3e3;
-			}
-
-			&:active {
-				background-color: #ffc9c9;
-			}
-		}
-	}
-
 	&__hint {
 		font-size: 0.8rem;
 		color: $text-muted;
@@ -171,6 +162,8 @@
 			background-color: lighten($error-color, 45%);
 		}
 	}
+
+	/* Flyttat till &__active-emoji för korrekt nästling */
 }
 
 @keyframes fadeIn {

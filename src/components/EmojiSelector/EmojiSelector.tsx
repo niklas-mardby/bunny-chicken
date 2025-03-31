@@ -72,12 +72,26 @@ const EmojiSelector: React.FC = () => {
 	};
 
 	// Hantera borttagning av vald emoji
-	const handleRemoveEmoji = () => {
-		if (selectedEmojiIndex !== null) {
-			removeEmoji(selectedEmojiIndex);
-			setSelectedEmojiIndex(null);
-		}
-	};
+	const handleRemoveEmoji = useCallback(
+		(index?: number) => {
+			// Om index är angiven, ta bort den emojin
+			// Annars, ta bort den markerade emojin
+			const emojiIndexToRemove =
+				index !== undefined ? index : selectedEmojiIndex;
+
+			if (emojiIndexToRemove !== null && emojiIndexToRemove !== undefined) {
+				removeEmoji(emojiIndexToRemove);
+
+				// Om den borttagna emojin var den markerade, återställ markeringen
+				if (selectedEmojiIndex === emojiIndexToRemove) {
+					setSelectedEmojiIndex(null);
+				}
+			}
+		},
+		[selectedEmojiIndex, removeEmoji]
+	);
+
+	// Dupliceringsfunktion borttagen
 
 	// Hantera ändring av emojistorlek
 	const handleSizeChange = useCallback(
@@ -141,26 +155,6 @@ const EmojiSelector: React.FC = () => {
 		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
 	}, []);
 
-	// Duplicera en emoji
-	const handleDuplicateEmoji = () => {
-		if (selectedEmojiIndex !== null) {
-			const emojiToDuplicate = design.emojiDecorations[selectedEmojiIndex];
-			const duplicatedEmoji = {
-				...emojiToDuplicate,
-				position: {
-					x: Math.min(emojiToDuplicate.position.x + 10, 90),
-					y: Math.min(emojiToDuplicate.position.y + 10, 90),
-				},
-			};
-			addEmoji(
-				duplicatedEmoji.emoji,
-				duplicatedEmoji.position,
-				duplicatedEmoji.size,
-				duplicatedEmoji.rotation
-			);
-		}
-	};
-
 	return (
 		<div className="emoji-selector">
 			<div className="emoji-selector__palette">
@@ -182,7 +176,7 @@ const EmojiSelector: React.FC = () => {
 					<p className="emoji-selector__info-text">Dina emojis:</p>
 					<div className="emoji-selector__emoji-list">
 						{design.emojiDecorations.map((decoration, index) => (
-							<button
+							<div
 								key={decoration.id}
 								className={`emoji-selector__active-emoji ${
 									selectedEmojiIndex === index
@@ -196,7 +190,15 @@ const EmojiSelector: React.FC = () => {
 								aria-label={`Redigera emoji ${decoration.emoji}`}
 							>
 								{decoration.emoji}
-							</button>
+								<div
+									className="emoji-selector__active-emoji__remove"
+									onClick={(e) => {
+										e.stopPropagation(); // Förhindra att emoji väljs när man klickar på kryss
+										handleRemoveEmoji(index);
+									}}
+									aria-label={`Ta bort emoji ${decoration.emoji}`}
+								></div>
+							</div>
 						))}
 					</div>
 				</div>
@@ -257,22 +259,7 @@ const EmojiSelector: React.FC = () => {
 						</SliderWithTooltipGroup>
 					</div>
 
-					<div className="emoji-selector__buttons">
-						<button
-							className="emoji-selector__action-button emoji-selector__action-button--duplicate"
-							onClick={handleDuplicateEmoji}
-							aria-label="Duplicera emoji"
-						>
-							Duplicera
-						</button>
-						<button
-							className="emoji-selector__action-button emoji-selector__action-button--remove"
-							onClick={handleRemoveEmoji}
-							aria-label="Ta bort emoji"
-						>
-							Ta bort
-						</button>
-					</div>
+					{/* Knappar borttagna för renare gränssnitt */}
 				</div>
 			)}
 
@@ -288,6 +275,14 @@ const EmojiSelector: React.FC = () => {
 					Klicka på en emoji ovan för att lägga till den på ditt ägg!
 				</p>
 			)}
+
+			{design.emojiDecorations.length > 0 &&
+				design.emojiDecorations.length < 5 && (
+					<p className="emoji-selector__hint">
+						Tips: Välj en emoji från listan för att ändra storlek och
+						rotation.
+					</p>
+				)}
 		</div>
 	);
 };
