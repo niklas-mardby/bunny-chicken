@@ -39,6 +39,8 @@ interface SliderWithTooltipGroupProps {
 	className?: string;
 	title?: string;
 	horizontal?: boolean;
+	columns?: number; // Nytt attribut för att stödja kolumner
+	customLayout?: boolean; // Nytt attribut för att tillåta en anpassad layout
 }
 
 export const SliderWithTooltipGroup: React.FC<SliderWithTooltipGroupProps> = ({
@@ -46,6 +48,8 @@ export const SliderWithTooltipGroup: React.FC<SliderWithTooltipGroupProps> = ({
 	className = "",
 	title,
 	horizontal = false,
+	columns = 1, // Standard är 1 kolumn
+	customLayout = false, // Standard är false
 }) => {
 	// State to track which slider is currently active (being dragged)
 	const [activeSlider, setActiveSlider] = useState<string | null>(null);
@@ -101,16 +105,23 @@ export const SliderWithTooltipGroup: React.FC<SliderWithTooltipGroupProps> = ({
 			registerCallback,
 			unregisterCallback,
 		}),
-		[activeSlider, activateSlider, registerCallback, unregisterCallback]
+		[activeSlider]
 	);
+
+	// Beräkna klassnamn baserad på props
+	const groupClassName = `slider-with-tooltip-group 
+		${horizontal ? "slider-with-tooltip-group--horizontal" : ""} 
+		${customLayout ? "slider-with-tooltip-group--custom-layout" : ""} 
+		${
+			columns > 1 && !customLayout
+				? `slider-with-tooltip-group--columns-${columns}`
+				: ""
+		} 
+		${className}`.trim();
 
 	return (
 		<TooltipGroupContext.Provider value={value}>
-			<div
-				className={`slider-with-tooltip-group ${
-					horizontal ? "slider-with-tooltip-group--horizontal" : ""
-				} ${className}`}
-			>
+			<div className={groupClassName}>
 				{title && (
 					<h3 className="slider-with-tooltip-group__title">{title}</h3>
 				)}

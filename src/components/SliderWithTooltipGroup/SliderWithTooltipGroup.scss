@@ -16,6 +16,50 @@
 		}
 	}
 
+	// Ny variant för kolumnlayout
+	&--columns-2 &__container {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: $spacing-medium;
+
+		@media (max-width: $breakpoint-sm) {
+			grid-template-columns: 1fr; // En kolumn på mindre skärmar
+		}
+	}
+
+	&--columns-3 &__container {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: $spacing-medium;
+
+		@media (max-width: $breakpoint-md) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		@media (max-width: $breakpoint-sm) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&--columns-4 &__container {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: $spacing-medium;
+
+		@media (max-width: $breakpoint-lg) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		@media (max-width: $breakpoint-sm) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	// Tillåt anpassad layout när komponenten behöver styra layouten externt
+	&--custom-layout &__container {
+		display: block; // Återställ till block för att tillåta anpassad layout
+	}
+
 	// Optional styling for group container
 	&__container {
 		width: 100%;

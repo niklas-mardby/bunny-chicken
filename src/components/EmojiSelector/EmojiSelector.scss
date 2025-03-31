@@ -95,6 +95,18 @@
 		box-shadow: $shadow-small;
 	}
 
+	// Egen styling för slidergruppen i emoji-väljaren
+	&__slider-group {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		margin-bottom: 0.5rem;
+
+		@media (max-width: $breakpoint-sm) {
+			grid-template-columns: 1fr; // En kolumn på mindre skärmar
+		}
+	}
+
 	&__buttons {
 		display: flex;
 		gap: 0.5rem;

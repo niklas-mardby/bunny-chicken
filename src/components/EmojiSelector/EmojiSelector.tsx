@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
 import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
@@ -80,30 +80,66 @@ const EmojiSelector: React.FC = () => {
 	};
 
 	// Hantera ändring av emojistorlek
-	const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (selectedEmojiIndex !== null) {
-			updateEmoji(selectedEmojiIndex, { size: parseInt(e.target.value) });
-		}
-	};
+	const handleSizeChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (selectedEmojiIndex !== null) {
+				updateEmoji(selectedEmojiIndex, { size: parseInt(e.target.value) });
+			}
+		},
+		[selectedEmojiIndex, updateEmoji]
+	);
 
 	// Hantera ändring av emojirotation
-	const handleRotationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (selectedEmojiIndex !== null) {
-			updateEmoji(selectedEmojiIndex, {
-				rotation: parseInt(e.target.value),
-			});
-		}
-	};
+	const handleRotationChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (selectedEmojiIndex !== null) {
+				updateEmoji(selectedEmojiIndex, {
+					rotation: parseInt(e.target.value),
+				});
+			}
+		},
+		[selectedEmojiIndex, updateEmoji]
+	);
+
+	// Hantera ändring av emoji X-position
+	const handlePositionXChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (selectedEmojiIndex !== null && currentEmoji) {
+				updateEmoji(selectedEmojiIndex, {
+					position: {
+						...currentEmoji.position,
+						x: parseInt(e.target.value),
+					},
+				});
+			}
+		},
+		[selectedEmojiIndex, updateEmoji, currentEmoji]
+	);
+
+	// Hantera ändring av emoji Y-position
+	const handlePositionYChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			if (selectedEmojiIndex !== null && currentEmoji) {
+				updateEmoji(selectedEmojiIndex, {
+					position: {
+						...currentEmoji.position,
+						y: parseInt(e.target.value),
+					},
+				});
+			}
+		},
+		[selectedEmojiIndex, updateEmoji, currentEmoji]
+	);
 
 	// Hantera klart-händelsen för slidern (för att uppdatera state när användaren slutar dra)
-	const handleSizeChangeComplete = () => {
+	const handleSizeChangeComplete = useCallback(() => {
 		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
-	};
+	}, []);
 
 	// Hantera klart-händelsen för rotationslidern
-	const handleRotationChangeComplete = () => {
+	const handleRotationChangeComplete = useCallback(() => {
 		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
-	};
+	}, []);
 
 	// Duplicera en emoji
 	const handleDuplicateEmoji = () => {
@@ -169,29 +205,57 @@ const EmojiSelector: React.FC = () => {
 			{/* Kontroller för att redigera vald emoji med SliderWithTooltipGroup */}
 			{currentEmoji && (
 				<div className="emoji-selector__controls">
-					<SliderWithTooltipGroup>
-						<SliderWithTooltip
-							id="emojiSize"
-							label="Storlek"
-							min={20}
-							max={100}
-							value={currentEmoji.size}
-							onChange={handleSizeChange}
-							onChangeComplete={handleSizeChangeComplete}
-							tooltipFormatter={(value) => `${value}px`}
-						/>
+					<div className="emoji-selector__slider-group">
+						<SliderWithTooltipGroup customLayout={true}>
+							<SliderWithTooltip
+								id="emojiSize"
+								label="Storlek"
+								min={20}
+								max={100}
+								value={currentEmoji.size}
+								onChange={handleSizeChange}
+								onChangeComplete={handleSizeChangeComplete}
+								tooltipFormatter={(value) => `${value}px`}
+							/>
+						</SliderWithTooltipGroup>
 
-						<SliderWithTooltip
-							id="emojiRotation"
-							label="Rotation"
-							min={0}
-							max={360}
-							value={currentEmoji.rotation}
-							onChange={handleRotationChange}
-							onChangeComplete={handleRotationChangeComplete}
-							tooltipFormatter={(value) => `${value}°`}
-						/>
-					</SliderWithTooltipGroup>
+						<SliderWithTooltipGroup customLayout={true}>
+							<SliderWithTooltip
+								id="emojiRotation"
+								label="Rotation"
+								min={0}
+								max={360}
+								value={currentEmoji.rotation}
+								onChange={handleRotationChange}
+								onChangeComplete={handleRotationChangeComplete}
+								tooltipFormatter={(value) => `${value}°`}
+							/>
+						</SliderWithTooltipGroup>
+
+						<SliderWithTooltipGroup customLayout={true}>
+							<SliderWithTooltip
+								id="emojiPositionX"
+								label="X-Position"
+								min={0}
+								max={100}
+								value={currentEmoji.position.x}
+								onChange={handlePositionXChange}
+								tooltipFormatter={(value) => `${value}%`}
+							/>
+						</SliderWithTooltipGroup>
+
+						<SliderWithTooltipGroup customLayout={true}>
+							<SliderWithTooltip
+								id="emojiPositionY"
+								label="Y-Position"
+								min={0}
+								max={100}
+								value={currentEmoji.position.y}
+								onChange={handlePositionYChange}
+								tooltipFormatter={(value) => `${value}%`}
+							/>
+						</SliderWithTooltipGroup>
+					</div>
 
 					<div className="emoji-selector__buttons">
 						<button
