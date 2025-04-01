@@ -7,41 +7,121 @@ import "./EmojiSelector.scss";
 // Maximum number of emojis allowed
 const MAX_EMOJIS = 10;
 
-// Lista med påskrelaterade och våriga emojis
-const EASTER_EMOJIS = [
-	"🐰",
-	"🐣",
-	"🐥",
-	"🌷",
-	"🌼",
-	"🥚",
-	"🐇",
-	"🌱",
-	"🦆",
-	"🧺",
-	"🐓",
-	"🌸",
-	"🍀",
-	"🦋",
-	"🐞",
-	"🐤",
-	"🌈",
-	"🌻",
-	"🌺",
-	"🌹",
-	"🌞",
-	"🐝",
-	"🦔",
-	"🐿️",
-	"🌧️",
-	"🌤️",
-	"🌳",
-	"🦩",
-	"🦚",
-	"🐔",
-	"🐦",
-	"🪶",
-	"🪺",
+// Emoji categories with their emojis
+type EmojiCategory = "easter" | "spring" | "love" | "celebration" | "misc";
+
+interface EmojiCategoryConfig {
+	id: EmojiCategory;
+	label: string;
+	emojis: string[];
+}
+
+const EMOJI_CATEGORIES: EmojiCategoryConfig[] = [
+	{
+		id: "easter",
+		label: "Påsk",
+		emojis: [
+			"🐰",
+			"🐣",
+			"🐥",
+			"🥚",
+			"🐇",
+			"🧺",
+			"🐓",
+			"🕯️",
+			"🌿",
+			"🐑",
+			"🐤",
+			"🐔",
+			"🍫",
+			"🥕",
+			"🕊️",
+			"🔔",
+		],
+	},
+	{
+		id: "spring",
+		label: "Vår",
+		emojis: [
+			"🌷",
+			"🌸",
+			"🌼",
+			"🌱",
+			"🌞",
+			"🌈",
+			"🦋",
+			"🐞",
+			"🐝",
+			"🌧️",
+			"🌻",
+			"🌺",
+			"🦢",
+			"🦆",
+			"🍃",
+			"🌳",
+			"🐸",
+			"🐛",
+			"🪲",
+			"🐱",
+		],
+	},
+	{
+		id: "love",
+		label: "Kärlek",
+		emojis: [
+			"❤️",
+			"🩷",
+			"💜",
+			"💚",
+			"💛",
+			"🧡",
+			"💖",
+			"💕",
+			"💝",
+			"💐",
+			"🤗",
+			"🥰",
+			"😘",
+			"💓",
+			"💌",
+			"💗",
+			"💘",
+			"💞",
+			"💑",
+			"😍",
+			"💋",
+			"🏳️‍🌈",
+			"🏳️‍⚧️",
+		],
+	},
+	{
+		id: "celebration",
+		label: "Fira",
+		emojis: [
+			"🥳",
+			"😊",
+			"🎉",
+			"✨",
+			"🎁",
+			"🍰",
+			"🍾",
+			"🥂",
+			"🍹",
+			"🎀",
+			"🎵",
+			"🎂",
+			"🧁",
+			"🙌",
+			"👏",
+			"🍭",
+			"🎈",
+		],
+	},
+	{
+		id: "misc",
+		label: "Blandat",
+		emojis: ["☕", "🌍", "🦄", "☮️", "👸", "👑", "💎", "🍍", "🧸"],
+	},
 ];
 
 const EmojiSelector: React.FC = () => {
@@ -49,6 +129,8 @@ const EmojiSelector: React.FC = () => {
 	const [selectedEmojiIndex, setSelectedEmojiIndex] = useState<number | null>(
 		null
 	);
+	const [activeCategory, setActiveCategory] =
+		useState<EmojiCategory>("easter");
 
 	// Calculated current emoji properties from the design state
 	const currentEmoji =
@@ -56,44 +138,57 @@ const EmojiSelector: React.FC = () => {
 			? design.emojiDecorations[selectedEmojiIndex]
 			: null;
 
-	// Hantera klick på en emoji i paletten
+	// Handle category selection
+	const handleCategoryClick = (category: EmojiCategory) => {
+		setActiveCategory(category);
+	};
+
+	// Get active emojis based on selected category
+	const getActiveEmojis = (): string[] => {
+		const category = EMOJI_CATEGORIES.find(
+			(cat) => cat.id === activeCategory
+		);
+		return category ? category.emojis : [];
+	};
+
+	// Handle emoji click from palette
 	const handleEmojiClick = useCallback(
 		(emoji: string) => {
-			// Kontrollera om max antal emojis är uppnått
+			// Check if max emojis limit is reached
 			if (design.emojiDecorations.length >= MAX_EMOJIS) {
-				return; // Tillåt inte fler än MAX_EMOJIS emojis
+				return; // Don't allow more than MAX_EMOJIS
 			}
 
-			// Lägg till emoji med position mitt på ägget och standardstorlek 50px
-			const xPosition = 50; // Alltid mitt på ägget horisontellt
-			const yPosition = 50; // Alltid mitt på ägget vertikalt
+			// Add emoji at center of egg with default size 50px
+			const xPosition = 50; // Always center horizontally
+			const yPosition = 50; // Always center vertically
 
-			// Lägg till emojin - den automatiska selektionen hanteras i useEffect
-			addEmoji(emoji, { x: xPosition, y: yPosition }, 50); // Standardstorlek 50px
+			// Add emoji - automatic selection will be handled in useEffect
+			addEmoji(emoji, { x: xPosition, y: yPosition }, 50);
 		},
 		[design.emojiDecorations.length, addEmoji]
 	);
 
-	// Håll koll på antalet emojis för att kunna välja den senast tillagda
+	// Track emojis count to select the latest added one
 	const previousEmojiCount = React.useRef(design.emojiDecorations.length);
 
-	// Håll koll på förändringar i emoji-arrayen för att hantera ny tillagd emoji
+	// Watch for changes in emoji array to handle new added emoji
 	useEffect(() => {
 		const currentEmojiCount = design.emojiDecorations.length;
 
-		// Om en ny emoji lagts till (längden har ökat)
+		// If a new emoji was added (length increased)
 		if (
 			currentEmojiCount > previousEmojiCount.current &&
 			currentEmojiCount > 0
 		) {
-			// Välj den senast tillagda emojin
+			// Select the latest added emoji
 			setSelectedEmojiIndex(currentEmojiCount - 1);
 		}
-		// Om alla emojis har tagits bort, återställ valet
+		// If all emojis were removed, reset selection
 		else if (currentEmojiCount === 0) {
 			setSelectedEmojiIndex(null);
 		}
-		// Om den valda emojin är utanför arrayen, välj den sista
+		// If selected emoji is out of bounds, select the last one
 		else if (
 			selectedEmojiIndex !== null &&
 			selectedEmojiIndex >= currentEmojiCount
@@ -101,27 +196,26 @@ const EmojiSelector: React.FC = () => {
 			setSelectedEmojiIndex(currentEmojiCount - 1);
 		}
 
-		// Uppdatera referensvärdet för nästa jämförelse
+		// Update reference value for next comparison
 		previousEmojiCount.current = currentEmojiCount;
 	}, [design.emojiDecorations.length, selectedEmojiIndex]);
 
-	// Hantera val av en befintlig emoji
+	// Handle selecting an existing emoji
 	const handleSelectEmoji = (index: number) => {
 		setSelectedEmojiIndex(selectedEmojiIndex === index ? null : index);
 	};
 
-	// Hantera borttagning av vald emoji
+	// Handle removing selected emoji
 	const handleRemoveEmoji = useCallback(
 		(index?: number) => {
-			// Om index är angiven, ta bort den emojin
-			// Annars, ta bort den markerade emojin
-			const emojiIndexToRemove =
-				index !== undefined ? index : selectedEmojiIndex;
+			// If index is specified, remove that emoji
+			// Otherwise, remove the selected emoji
+			const emojiIndexToRemove = index ?? selectedEmojiIndex;
 
 			if (emojiIndexToRemove !== null && emojiIndexToRemove !== undefined) {
 				removeEmoji(emojiIndexToRemove);
 
-				// Om den borttagna emojin var den markerade, återställ markeringen
+				// If the removed emoji was the selected one, reset selection
 				if (selectedEmojiIndex === emojiIndexToRemove) {
 					setSelectedEmojiIndex(null);
 				}
@@ -130,9 +224,7 @@ const EmojiSelector: React.FC = () => {
 		[selectedEmojiIndex, removeEmoji]
 	);
 
-	// Dupliceringsfunktion borttagen
-
-	// Hantera ändring av emojistorlek
+	// Handle emoji size change
 	const handleSizeChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			if (selectedEmojiIndex !== null) {
@@ -142,7 +234,7 @@ const EmojiSelector: React.FC = () => {
 		[selectedEmojiIndex, updateEmoji]
 	);
 
-	// Hantera ändring av emojirotation
+	// Handle emoji rotation change
 	const handleRotationChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			if (selectedEmojiIndex !== null) {
@@ -154,7 +246,7 @@ const EmojiSelector: React.FC = () => {
 		[selectedEmojiIndex, updateEmoji]
 	);
 
-	// Hantera ändring av emoji X-position
+	// Handle emoji X position change
 	const handlePositionXChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			if (selectedEmojiIndex !== null && currentEmoji) {
@@ -169,7 +261,7 @@ const EmojiSelector: React.FC = () => {
 		[selectedEmojiIndex, updateEmoji, currentEmoji]
 	);
 
-	// Hantera ändring av emoji Y-position
+	// Handle emoji Y position change
 	const handlePositionYChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			if (selectedEmojiIndex !== null && currentEmoji) {
@@ -184,20 +276,38 @@ const EmojiSelector: React.FC = () => {
 		[selectedEmojiIndex, updateEmoji, currentEmoji]
 	);
 
-	// Hantera klart-händelsen för slidern (för att uppdatera state när användaren slutar dra)
+	// Handle slider done events
 	const handleSizeChangeComplete = useCallback(() => {
-		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
+		// No additional handling needed as updateEmoji is called continuously
 	}, []);
 
-	// Hantera klart-händelsen för rotationslidern
+	// Handle rotation slider done event
 	const handleRotationChangeComplete = useCallback(() => {
-		// Ingen extra hantering behövs eftersom updateEmoji anropas kontinuerligt
+		// No additional handling needed as updateEmoji is called continuously
 	}, []);
 
 	return (
 		<div className="emoji-selector">
+			{/* Category buttons */}
+			<div className="emoji-selector__categories">
+				{EMOJI_CATEGORIES.map((category) => (
+					<button
+						key={category.id}
+						className={`emoji-selector__category ${
+							activeCategory === category.id
+								? "emoji-selector__category--active"
+								: ""
+						}`}
+						onClick={() => handleCategoryClick(category.id)}
+					>
+						{category.label}
+					</button>
+				))}
+			</div>
+
+			{/* Emoji palette based on selected category */}
 			<div className="emoji-selector__palette">
-				{EASTER_EMOJIS.map((emoji) => (
+				{getActiveEmojis().map((emoji) => (
 					<button
 						key={emoji}
 						className="emoji-selector__emoji"
@@ -209,7 +319,7 @@ const EmojiSelector: React.FC = () => {
 				))}
 			</div>
 
-			{/* Lista över befintliga emojis på ägget */}
+			{/* List of existing emojis on the egg */}
 			{design.emojiDecorations.length > 0 && (
 				<div className="emoji-selector__active-emojis">
 					<p className="emoji-selector__info-text">Dina emojis:</p>
@@ -232,7 +342,7 @@ const EmojiSelector: React.FC = () => {
 								<button
 									className="emoji-selector__active-emoji__remove"
 									onClick={(e) => {
-										e.stopPropagation(); // Förhindra att emoji väljs när man klickar på kryss
+										e.stopPropagation(); // Prevent selecting emoji when clicking remove button
 										handleRemoveEmoji(index);
 									}}
 									aria-label={`Ta bort emoji ${decoration.emoji}`}
@@ -243,7 +353,7 @@ const EmojiSelector: React.FC = () => {
 				</div>
 			)}
 
-			{/* Kontroller för att redigera vald emoji med SliderWithTooltipGroup */}
+			{/* Controls for editing selected emoji */}
 			{currentEmoji && (
 				<div className="emoji-selector__controls">
 					<div className="emoji-selector__slider-group">
@@ -297,8 +407,6 @@ const EmojiSelector: React.FC = () => {
 							/>
 						</SliderWithTooltipGroup>
 					</div>
-
-					{/* Knappar borttagna för renare gränssnitt */}
 				</div>
 			)}
 
@@ -308,7 +416,7 @@ const EmojiSelector: React.FC = () => {
 				</p>
 			)}
 
-			{/* Visa hjälptext när inga emojis är tillagda */}
+			{/* Show help text when no emojis are added */}
 			{design.emojiDecorations.length === 0 && (
 				<p className="emoji-selector__hint">
 					Klicka på en emoji ovan för att lägga till den på ditt ägg!

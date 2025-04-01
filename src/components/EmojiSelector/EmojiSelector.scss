@@ -1,9 +1,40 @@
 @use "../../assets/styles/index" as *;
 
 .emoji-selector {
+	// New styles for category buttons
+	&__categories {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr); // 4 equal columns for buttons
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	&__category {
+		background-color: #f5f5f5;
+		border: 2px solid #e0e0e0;
+		border-radius: 0.5rem;
+		padding: 0.5rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		font-size: 0.9rem;
+		text-align: center;
+
+		&:hover {
+			background-color: #e8e8e8;
+		}
+
+		&--active {
+			background-color: #d0d3ff;
+			border-color: #a5a9ff;
+			color: #5f63ff;
+			font-weight: 500;
+		}
+	}
+
+	// Existing styles with some modifications
 	&__palette {
 		display: grid;
-		grid-template-columns: repeat(8, 1fr); // 8 kolumner för emojis
+		grid-template-columns: repeat(8, 1fr); // 8 columns for emojis
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 	}
@@ -73,7 +104,7 @@
 			border-width: 2px;
 			background-color: #f1f2ff;
 			box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
-			transform: scale(1.05); // Gör den lite större för att framhäva den
+			transform: scale(1.05); // Make it slightly larger to highlight
 		}
 
 		&__remove {
@@ -123,10 +154,6 @@
 		}
 	}
 
-	/* This class is now properly nested under &__active-emoji */
-
-	/* Knappstilar borttagna */
-
 	&__controls {
 		background-color: $surface-color;
 		border-radius: $border-radius-medium;
@@ -136,7 +163,7 @@
 		box-shadow: $shadow-small;
 	}
 
-	// Egen styling för slidergruppen i emoji-väljaren
+	// Styling for slider group in emoji selector
 	&__slider-group {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -144,7 +171,7 @@
 		margin-bottom: 0.5rem;
 
 		@media (max-width: $breakpoint-sm) {
-			grid-template-columns: 1fr; // En kolumn på mindre skärmar
+			grid-template-columns: 1fr; // One column on smaller screens
 		}
 	}
 
@@ -166,8 +193,6 @@
 			background-color: lighten($error-color, 45%);
 		}
 	}
-
-	/* Flyttat till &__active-emoji för korrekt nästling */
 }
 
 @keyframes fadeIn {
@@ -181,11 +206,15 @@
 	}
 }
 
-// Responsiv design för mindre skärmar
+// Responsive design for smaller screens
 @media (max-width: $breakpoint-md) {
 	.emoji-selector {
+		&__categories {
+			grid-template-columns: repeat(2, 1fr); // Two columns on medium screens
+		}
+
 		&__palette {
-			grid-template-columns: repeat(6, 1fr); // Minska antalet kolumner
+			grid-template-columns: repeat(6, 1fr); // Fewer columns
 		}
 	}
 }
@@ -193,7 +222,10 @@
 @media (max-width: $breakpoint-sm) {
 	.emoji-selector {
 		&__palette {
-			grid-template-columns: repeat(4, 1fr); // Ännu färre kolumner
+			grid-template-columns: repeat(
+				4,
+				1fr
+			); // Even fewer columns on small screens
 		}
 	}
 }
