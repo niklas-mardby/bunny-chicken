@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import "./ColorPicker.scss";
 
@@ -21,7 +21,7 @@ const PASTEL_COLORS = [
 	"#b0c4de", // ljus stålblå
 ];
 
-const ColorPicker: React.FC = () => {
+const ColorPicker = () => {
 	const { design, setColorScheme } = useEggDesigner();
 
 	// Hämta nuvarande färger
@@ -49,7 +49,7 @@ const ColorPicker: React.FC = () => {
 		[primary, setColorScheme]
 	);
 
-	// Hantera direkt färgval för primär färg
+	// Hantera färgval för primär färg
 	const handlePrimaryColorInput = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			setColorScheme({
@@ -60,7 +60,7 @@ const ColorPicker: React.FC = () => {
 		[secondary, setColorScheme]
 	);
 
-	// Hantera direkt färgval för sekundär färg
+	// Hantera färgval för sekundär färg
 	const handleSecondaryColorInput = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			setColorScheme({
