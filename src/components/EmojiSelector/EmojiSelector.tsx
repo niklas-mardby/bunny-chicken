@@ -246,7 +246,7 @@ const EmojiSelector = () => {
 								id="emojiSize"
 								label="Storlek"
 								min={20}
-								max={100}
+								max={120}
 								value={currentEmoji.size}
 								onChange={handleSizeChange}
 								onChangeComplete={handleSizeChangeComplete}
