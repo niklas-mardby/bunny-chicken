@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useEggDesign } from "../../context/EggDesignContext";
 import "./EggCanvas.scss";
 
@@ -7,7 +7,7 @@ interface EggCanvasProps {
 	height?: number;
 }
 
-const EggCanvas: React.FC<EggCanvasProps> = ({ width = 300, height = 400 }) => {
+const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 	const { state } = useEggDesign();
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
