@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useShareLink } from "../../hooks/useShareLink";
 import "./ShareButton.scss";
 
-const ShareButton: React.FC = () => {
+const ShareButton = () => {
 	const { copyShareLink } = useShareLink();
 	const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 	const [shareUrl, setShareUrl] = useState("");
