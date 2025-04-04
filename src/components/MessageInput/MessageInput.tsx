@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import "./MessageInput.scss";
 
-const MessageInput: React.FC = () => {
+const MessageInput = () => {
 	const { design, setMessage } = useEggDesigner();
 	const [inputValue, setInputValue] = useState(design.message);
 

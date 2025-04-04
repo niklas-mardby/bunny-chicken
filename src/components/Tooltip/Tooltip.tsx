@@ -1,23 +1,23 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import "./Tooltip.scss";
 
-interface TooltipProps {
+type TooltipProps = {
 	x: number;
 	y: number;
 	children: React.ReactNode;
 	className?: string;
 	position?: "top" | "right" | "bottom" | "left";
 	offset?: number;
-}
+};
 
-const Tooltip: React.FC<TooltipProps> = ({
+const Tooltip = ({
 	x,
 	y,
 	children,
 	className = "",
 	position = "top",
 	offset = 10,
-}) => {
+}: TooltipProps) => {
 	const tooltipRef = useRef<HTMLDivElement>(null);
 	const [tooltipSize, setTooltipSize] = useState({ width: 0, height: 0 });
 	const [show, setShow] = useState(false);

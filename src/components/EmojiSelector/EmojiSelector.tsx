@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
 import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
@@ -54,7 +54,7 @@ const EmojiSelector = () => {
 	);
 
 	// Track emojis count to select the latest added one
-	const previousEmojiCount = React.useRef(design.emojiDecorations.length);
+	const previousEmojiCount = useRef(design.emojiDecorations.length);
 
 	// Watch for changes in emoji array to handle new added emoji
 	useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import "./ImprovedColorPicker.scss";
 
@@ -42,9 +42,9 @@ interface ImprovedColorPickerProps {
 	colorCount?: number;
 }
 
-const ImprovedColorPicker: React.FC<ImprovedColorPickerProps> = ({
+const ImprovedColorPicker = ({
 	colorCount = 2, // Standard är 2 färger (primär och sekundär)
-}) => {
+}: ImprovedColorPickerProps) => {
 	const { design, setColorScheme } = useEggDesigner();
 
 	// Hämta nuvarande färger från globalt state

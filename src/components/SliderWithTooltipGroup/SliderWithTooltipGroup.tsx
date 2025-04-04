@@ -1,4 +1,4 @@
-import React, {
+import {
 	createContext,
 	useState,
 	useContext,
@@ -10,12 +10,12 @@ import React, {
 import "./SliderWithTooltipGroup.scss";
 
 // Define the context type
-interface TooltipGroupContextType {
+type TooltipGroupContextType = {
 	activeSlider: string | null;
 	activateSlider: (id: string | null, callback?: () => void) => void;
 	registerCallback: (id: string, callback: () => void) => void;
 	unregisterCallback: (id: string) => void;
-}
+};
 
 // Create context with undefined default value
 const TooltipGroupContext = createContext<TooltipGroupContextType | undefined>(
@@ -34,23 +34,23 @@ export const useTooltipGroup = (): TooltipGroupContextType => {
 };
 
 // Props type for the group component
-interface SliderWithTooltipGroupProps {
+type SliderWithTooltipGroupProps = {
 	children: ReactNode;
 	className?: string;
 	title?: string;
 	horizontal?: boolean;
 	columns?: number; // Nytt attribut för att stödja kolumner
 	customLayout?: boolean; // Nytt attribut för att tillåta en anpassad layout
-}
+};
 
-export const SliderWithTooltipGroup: React.FC<SliderWithTooltipGroupProps> = ({
+export const SliderWithTooltipGroup = ({
 	children,
 	className = "",
 	title,
 	horizontal = false,
 	columns = 1, // Standard är 1 kolumn
 	customLayout = false, // Standard är false
-}) => {
+}: SliderWithTooltipGroupProps) => {
 	// State to track which slider is currently active (being dragged)
 	const [activeSlider, setActiveSlider] = useState<string | null>(null);
 	// Store callbacks for each slider

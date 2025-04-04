@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
 import { Pattern, StripeDirection, StripeStyle } from "../../types";
 import SliderWithTooltip from "../SliderWithTooltip/SliderWithTooltip";
 import SliderWithTooltipGroup from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./PatternSelector.scss";
 
-const PatternSelector: React.FC = () => {
+const PatternSelector = () => {
 	const {
 		design,
 		setPattern,

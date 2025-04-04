@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useId } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import Tooltip from "../Tooltip/Tooltip";
 import { useTooltipGroup } from "../SliderWithTooltipGroup/SliderWithTooltipGroup";
 import "./SliderWithTooltip.scss";
@@ -19,7 +19,7 @@ interface SliderWithTooltipProps {
 	disabled?: boolean;
 }
 
-const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
+const SliderWithTooltip = ({
 	id,
 	min,
 	max,
@@ -33,7 +33,7 @@ const SliderWithTooltip: React.FC<SliderWithTooltipProps> = ({
 	showTooltip = true,
 	tooltipFormatter,
 	disabled = false,
-}) => {
+}: SliderWithTooltipProps) => {
 	// Get unique ID for this slider if not provided
 	const generatedId = useId();
 	const sliderId = id || generatedId;

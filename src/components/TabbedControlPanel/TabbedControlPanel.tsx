@@ -62,13 +62,7 @@ const TabbedControlPanel = () => {
 				))}
 			</div>
 
-			<div className="control-panel__content">
-				{/* <h3 className="control-panel__section-title">
-					{tabs.find((tab) => tab.id === activeTab)?.label}
-				</h3> */}
-
-				{renderTabContent()}
-			</div>
+			<div className="control-panel__content">{renderTabContent()}</div>
 
 			<div className="control-panel__actions">
 				<button
