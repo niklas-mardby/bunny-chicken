@@ -8,8 +8,9 @@ export type StripeStyle = "straight" | "zigzag" | "wavy";
 export interface ColorScheme {
 	primary: string;
 	secondary: string;
-	tertiary?: string; // Tillägg för tredje färg
-	quaternary?: string; // Tillägg för fjärde färg
+	third?: string;
+	fourth?: string;
+	fifth?: string;
 }
 
 // Interface för olika mönsterinställningar
