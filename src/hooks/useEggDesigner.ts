@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import {
 	Pattern,
 	ColorScheme,
-	StripeDirection,
 	StripeStyle,
 	EmojiDecoration,
 	PatternSettings,
@@ -41,15 +40,16 @@ export const useEggDesigner = () => {
 
 	// Funktion för att uppdatera rändinställningar
 	const updateStripeSettings = useCallback(
-		(count: number, direction: StripeDirection, style: StripeStyle) => {
+		(count: number, rotation: number, style: StripeStyle) => {
+			// Ändrat från direction till rotation
 			console.log(
 				"updateStripeSettings called with:",
 				count,
-				direction,
+				rotation, // Ändrat från direction till rotation
 				style
 			);
 			updatePatternSettings({
-				stripes: { count, direction, style },
+				stripes: { count, rotation, style }, // Ändrat från direction till rotation
 			});
 		},
 		[updatePatternSettings]
@@ -69,7 +69,6 @@ export const useEggDesigner = () => {
 	// Funktion för att uppdatera rutmönsterinställningar
 	const updateCheckeredSettings = useCallback(
 		(size: number, rotation: number = 0) => {
-			// Uppdaterad för att ta rotation med default-värde
 			console.log("updateCheckeredSettings called with:", size, rotation);
 			updatePatternSettings({
 				checkered: { size, rotation },

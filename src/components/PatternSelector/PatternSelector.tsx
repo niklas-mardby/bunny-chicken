@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useEggDesigner } from "../../hooks/useEggDesigner";
-import { Pattern, StripeDirection, StripeStyle } from "../../types";
+import { Pattern, StripeStyle } from "../../types";
 import PatternOptions from "./components/PatternOptions";
 import DotSettingsPanel from "./components/DotSettingsPanel";
 import StripeSettingsPanel from "./components/StripeSettingsPanel";
@@ -21,11 +21,10 @@ const PatternSelector = () => {
 	const [dotDensity, setDotDensity] = useState(0.5);
 	const [dotRotation, setDotRotation] = useState(0);
 	const [stripeCount, setStripeCount] = useState(6);
-	const [stripeDirection, setStripeDirection] =
-		useState<StripeDirection>("horizontal");
+	const [stripeRotation, setStripeRotation] = useState(0); // Ändrat från stripeDirection
 	const [stripeStyle, setStripeStyle] = useState<StripeStyle>("straight");
 	const [checkeredSize, setCheckeredSize] = useState(20);
-	const [checkeredRotation, setCheckeredRotation] = useState(0); // Ny state för rotation
+	const [checkeredRotation, setCheckeredRotation] = useState(0);
 
 	// Sync local state with global state
 	useEffect(() => {
@@ -37,13 +36,13 @@ const PatternSelector = () => {
 
 		if (design.patternSettings.stripes) {
 			setStripeCount(design.patternSettings.stripes.count);
-			setStripeDirection(design.patternSettings.stripes.direction);
+			setStripeRotation(design.patternSettings.stripes.rotation ?? 0);
 			setStripeStyle(design.patternSettings.stripes.style);
 		}
 
 		if (design.patternSettings.checkered) {
 			setCheckeredSize(design.patternSettings.checkered.size);
-			setCheckeredRotation(design.patternSettings.checkered.rotation || 0); // Uppdaterad för att hantera rotation
+			setCheckeredRotation(design.patternSettings.checkered.rotation || 0);
 		}
 	}, [design.patternSettings]);
 
@@ -55,7 +54,7 @@ const PatternSelector = () => {
 		if (pattern === "dots" && !design.patternSettings.dots) {
 			updateDotSettings(dotSize, dotDensity, dotRotation);
 		} else if (pattern === "stripes" && !design.patternSettings.stripes) {
-			updateStripeSettings(stripeCount, stripeDirection, stripeStyle);
+			updateStripeSettings(stripeCount, stripeRotation, stripeStyle);
 		} else if (pattern === "checkered" && !design.patternSettings.checkered) {
 			updateCheckeredSettings(checkeredSize, checkeredRotation);
 		}
@@ -67,7 +66,7 @@ const PatternSelector = () => {
 	};
 
 	const handleStripeSettingsChange = () => {
-		updateStripeSettings(stripeCount, stripeDirection, stripeStyle);
+		updateStripeSettings(stripeCount, stripeRotation, stripeStyle);
 	};
 
 	const handleCheckeredSettingsChange = () => {
@@ -98,18 +97,22 @@ const PatternSelector = () => {
 				return (
 					<StripeSettingsPanel
 						stripeCount={stripeCount}
-						stripeDirection={stripeDirection}
+						stripeRotation={stripeRotation}
 						stripeStyle={stripeStyle}
 						onCountChange={(e) =>
 							setStripeCount(parseInt(e.target.value))
 						}
-						onDirectionChange={(direction) => {
-							setStripeDirection(direction);
-							updateStripeSettings(stripeCount, direction, stripeStyle);
+						onRotationChange={(e) => {
+							setStripeRotation(parseInt(e.target.value));
+							updateStripeSettings(
+								stripeCount,
+								parseInt(e.target.value),
+								stripeStyle
+							);
 						}}
 						onStyleChange={(style) => {
 							setStripeStyle(style);
-							updateStripeSettings(stripeCount, stripeDirection, style);
+							updateStripeSettings(stripeCount, stripeRotation, style);
 						}}
 						onChangeComplete={handleStripeSettingsChange}
 					/>
@@ -118,13 +121,13 @@ const PatternSelector = () => {
 				return (
 					<CheckeredSettingsPanel
 						checkeredSize={checkeredSize}
-						checkeredRotation={checkeredRotation} // Skickar rotation till panelen
+						checkeredRotation={checkeredRotation}
 						onSizeChange={(e) =>
 							setCheckeredSize(parseInt(e.target.value))
 						}
-						onRotationChange={(
-							e // Ny handler för rotation
-						) => setCheckeredRotation(parseInt(e.target.value))}
+						onRotationChange={(e) =>
+							setCheckeredRotation(parseInt(e.target.value))
+						}
 						onChangeComplete={handleCheckeredSettingsChange}
 					/>
 				);

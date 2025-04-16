@@ -1,9 +1,6 @@
 // Typer för olika mönster
 export type Pattern = "solid" | "dots" | "stripes" | "checkered" | "gradient";
 
-// Riktning för ränder
-export type StripeDirection = "horizontal" | "vertical" | "diagonal";
-
 // Stil för ränder
 export type StripeStyle = "straight" | "zigzag" | "wavy";
 
@@ -24,16 +21,16 @@ export interface PatternSettings {
 	dots?: {
 		size: number;
 		density: number;
-		rotation: number; // Ny property för rotation (0-180 grader)
+		rotation: number; // Rotation (0-180 grader)
 	};
 	stripes?: {
 		count: number;
-		direction: StripeDirection;
+		rotation: number; // Ny property för rotation (0-180 grader), ersätter direction
 		style: StripeStyle;
 	};
 	checkered?: {
 		size: number;
-		rotation: number; // Ny property för rotation (0-90 grader)
+		rotation: number; // Rotation (0-90 grader)
 	};
 	gradient?: {
 		direction: string; // t.ex. "linear" eller "radial"

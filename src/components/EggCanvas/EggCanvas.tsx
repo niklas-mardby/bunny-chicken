@@ -2,10 +2,10 @@ import { useRef, useEffect } from "react";
 import { useEggDesign } from "../../context/EggDesignContext";
 import "./EggCanvas.scss";
 
-type EggCanvasProps = {
+interface EggCanvasProps {
 	width?: number;
 	height?: number;
-};
+}
 
 const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 	const { state } = useEggDesign();
@@ -157,11 +157,11 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 			case "stripes":
 				if (patternSettings.stripes) {
-					const { count, direction, style } = patternSettings.stripes;
+					const { count, rotation = 0, style } = patternSettings.stripes; // Ändrat från direction till rotation
 					drawStripePattern(ctx, centerX, centerY, width, height, {
 						colorScheme,
 						count,
-						direction,
+						rotation,
 						style,
 					});
 				}
@@ -245,30 +245,24 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 		options: {
 			colorScheme: typeof state.patternSettings.colorScheme;
 			count: number;
-			direction: string;
+			rotation: number; // Ändrat från direction (string) till rotation (number)
 			style: string;
 		}
 	) => {
-		const { colorScheme, count, direction, style } = options;
+		const { colorScheme, count, rotation, style } = options;
 		const stripeWidth = width / count;
 
-		// Beräkna vinkeln för diagonala ränder
-		let angle = 0;
-		if (direction === "diagonal") {
-			angle = Math.PI / 4; // 45 grader
-		} else if (direction === "vertical") {
-			angle = Math.PI / 2; // 90 grader
-		}
+		// Beräkna vinkeln från rotation (i grader)
+		const angle = (rotation * Math.PI) / 180; // Konvertera grader till radianer
 
 		ctx.save();
 		ctx.translate(centerX, centerY);
 		ctx.rotate(angle);
 
-		const totalWidth =
-			direction === "diagonal"
-				? Math.sqrt(width * width + height * height)
-				: width;
-		const totalHeight = height;
+		// Beräkna den maximala diagonalen för att säkerställa att hela ägget täcks vid alla rotationer
+		const diagonal = Math.sqrt(width * width + height * height);
+		const totalWidth = diagonal;
+		const totalHeight = diagonal;
 
 		// Rita ränder
 		for (let i = 0; i < count; i++) {
@@ -360,8 +354,8 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 		// Rita rutmönster
 		for (
-			let x = centerX - width / 2 - tileSize * 4; // Utöka området för att täcka kanter vid rotation
-			x < centerX + width / 2 + tileSize * 4;
+			let x = centerX - width / 2 - tileSize; // Utöka området för att täcka kanter vid rotation
+			x < centerX + width / 2 + tileSize;
 			x += tileSize
 		) {
 			for (
