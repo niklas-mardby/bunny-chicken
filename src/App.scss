@@ -19,5 +19,13 @@
 	&__footer-text {
 		font-size: 0.9rem;
 		margin: 0;
+
+		a {
+			color: white;
+
+			&:hover {
+				color: white;
+			}
+		}
 	}
 }

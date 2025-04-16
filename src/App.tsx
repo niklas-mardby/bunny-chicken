@@ -13,7 +13,15 @@ const App = () => {
 					</main>
 					<footer className="app__footer">
 						<p className="app__footer-text">
-							Glad Påsk! 🐣 Designa och dela ditt eget påskägg.
+							Glad Påsk! 🐣 Designa och dela ditt eget påskägg. ©{" "}
+							{new Date().getFullYear()}{" "}
+							<a
+								href="https://www.linkedin.com/in/mardby/"
+								target="_blank"
+								rel="noopener"
+							>
+								Niklas Mårdby
+							</a>
 						</p>
 					</footer>
 				</EggDesignProvider>
