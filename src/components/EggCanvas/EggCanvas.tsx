@@ -2,10 +2,10 @@ import { useRef, useEffect } from "react";
 import { useEggDesign } from "../../context/EggDesignContext";
 import "./EggCanvas.scss";
 
-interface EggCanvasProps {
+type EggCanvasProps = {
 	width?: number;
 	height?: number;
-}
+};
 
 const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 	const { state } = useEggDesign();
@@ -169,10 +169,11 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 			case "checkered":
 				if (patternSettings.checkered) {
-					const { size } = patternSettings.checkered;
+					const { size, rotation = 0 } = patternSettings.checkered; // Hämta rotation med default 0
 					drawCheckeredPattern(ctx, centerX, centerY, width, height, {
 						colorScheme,
 						size,
+						rotation,
 					});
 				}
 				break;
@@ -343,20 +344,29 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 		options: {
 			colorScheme: typeof state.patternSettings.colorScheme;
 			size: number;
+			rotation: number; // Ny parameter för rotation
 		}
 	) => {
-		const { colorScheme, size } = options;
+		const { colorScheme, size, rotation } = options;
 		const tileSize = size;
+
+		// Spara canvas state innan rotation
+		ctx.save();
+
+		// Rotera canvas runt mittpunkten
+		ctx.translate(centerX, centerY);
+		ctx.rotate((rotation * Math.PI) / 180); // Konvertera grader till radianer
+		ctx.translate(-centerX, -centerY);
 
 		// Rita rutmönster
 		for (
-			let x = centerX - width / 2;
-			x < centerX + width / 2;
+			let x = centerX - width / 2 - tileSize * 4; // Utöka området för att täcka kanter vid rotation
+			x < centerX + width / 2 + tileSize * 4;
 			x += tileSize
 		) {
 			for (
-				let y = centerY - height / 2;
-				y < centerY + height / 2;
+				let y = centerY - height / 2 - tileSize; // Utöka området för att täcka kanter vid rotation
+				y < centerY + height / 2 + tileSize;
 				y += tileSize
 			) {
 				const isEvenRow =
@@ -372,6 +382,9 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 				ctx.fillRect(x, y, tileSize, tileSize);
 			}
 		}
+
+		// Återställ canvas state
+		ctx.restore();
 	};
 
 	// Rita emojis

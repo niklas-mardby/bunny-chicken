@@ -68,10 +68,11 @@ export const useEggDesigner = () => {
 
 	// Funktion för att uppdatera rutmönsterinställningar
 	const updateCheckeredSettings = useCallback(
-		(size: number) => {
-			console.log("updateCheckeredSettings called with:", size);
+		(size: number, rotation: number = 0) => {
+			// Uppdaterad för att ta rotation med default-värde
+			console.log("updateCheckeredSettings called with:", size, rotation);
 			updatePatternSettings({
-				checkered: { size },
+				checkered: { size, rotation },
 			});
 		},
 		[updatePatternSettings]

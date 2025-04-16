@@ -33,6 +33,7 @@ export interface PatternSettings {
 	};
 	checkered?: {
 		size: number;
+		rotation: number; // Ny property för rotation (0-90 grader)
 	};
 	gradient?: {
 		direction: string; // t.ex. "linear" eller "radial"

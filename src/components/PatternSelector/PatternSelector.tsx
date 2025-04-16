@@ -25,6 +25,7 @@ const PatternSelector = () => {
 		useState<StripeDirection>("horizontal");
 	const [stripeStyle, setStripeStyle] = useState<StripeStyle>("straight");
 	const [checkeredSize, setCheckeredSize] = useState(20);
+	const [checkeredRotation, setCheckeredRotation] = useState(0); // Ny state för rotation
 
 	// Sync local state with global state
 	useEffect(() => {
@@ -42,6 +43,7 @@ const PatternSelector = () => {
 
 		if (design.patternSettings.checkered) {
 			setCheckeredSize(design.patternSettings.checkered.size);
+			setCheckeredRotation(design.patternSettings.checkered.rotation || 0); // Uppdaterad för att hantera rotation
 		}
 	}, [design.patternSettings]);
 
@@ -55,7 +57,7 @@ const PatternSelector = () => {
 		} else if (pattern === "stripes" && !design.patternSettings.stripes) {
 			updateStripeSettings(stripeCount, stripeDirection, stripeStyle);
 		} else if (pattern === "checkered" && !design.patternSettings.checkered) {
-			updateCheckeredSettings(checkeredSize);
+			updateCheckeredSettings(checkeredSize, checkeredRotation);
 		}
 	};
 
@@ -69,7 +71,7 @@ const PatternSelector = () => {
 	};
 
 	const handleCheckeredSettingsChange = () => {
-		updateCheckeredSettings(checkeredSize);
+		updateCheckeredSettings(checkeredSize, checkeredRotation);
 	};
 
 	// Render appropriate settings panel based on current pattern
@@ -116,9 +118,13 @@ const PatternSelector = () => {
 				return (
 					<CheckeredSettingsPanel
 						checkeredSize={checkeredSize}
+						checkeredRotation={checkeredRotation} // Skickar rotation till panelen
 						onSizeChange={(e) =>
 							setCheckeredSize(parseInt(e.target.value))
 						}
+						onRotationChange={(
+							e // Ny handler för rotation
+						) => setCheckeredRotation(parseInt(e.target.value))}
 						onChangeComplete={handleCheckeredSettingsChange}
 					/>
 				);
