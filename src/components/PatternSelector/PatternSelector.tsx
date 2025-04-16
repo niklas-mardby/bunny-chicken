@@ -82,13 +82,30 @@ const PatternSelector = () => {
 						dotSize={dotSize}
 						dotDensity={dotDensity}
 						dotRotation={dotRotation}
-						onSizeChange={(e) => setDotSize(parseInt(e.target.value))}
-						onDensityChange={(e) =>
-							setDotDensity(parseFloat(e.target.value))
-						}
-						onRotationChange={(e) =>
-							setDotRotation(parseInt(e.target.value))
-						}
+						onSizeChange={(e) => {
+							setDotSize(parseInt(e.target.value));
+							updateDotSettings(
+								parseInt(e.target.value),
+								dotDensity,
+								dotRotation
+							);
+						}}
+						onDensityChange={(e) => {
+							setDotDensity(parseFloat(e.target.value));
+							updateDotSettings(
+								dotSize,
+								parseFloat(e.target.value),
+								dotRotation
+							);
+						}}
+						onRotationChange={(e) => {
+							setDotRotation(parseInt(e.target.value));
+							updateDotSettings(
+								dotSize,
+								dotDensity,
+								parseInt(e.target.value)
+							);
+						}}
 						onChangeComplete={handleDotSettingsChange}
 					/>
 				);
@@ -99,9 +116,14 @@ const PatternSelector = () => {
 						stripeCount={stripeCount}
 						stripeRotation={stripeRotation}
 						stripeStyle={stripeStyle}
-						onCountChange={(e) =>
-							setStripeCount(parseInt(e.target.value))
-						}
+						onCountChange={(e) => {
+							setStripeCount(parseInt(e.target.value));
+							updateStripeSettings(
+								parseInt(e.target.value),
+								stripeRotation,
+								stripeStyle
+							);
+						}}
 						onRotationChange={(e) => {
 							setStripeRotation(parseInt(e.target.value));
 							updateStripeSettings(
@@ -122,12 +144,20 @@ const PatternSelector = () => {
 					<CheckeredSettingsPanel
 						checkeredSize={checkeredSize}
 						checkeredRotation={checkeredRotation}
-						onSizeChange={(e) =>
-							setCheckeredSize(parseInt(e.target.value))
-						}
-						onRotationChange={(e) =>
-							setCheckeredRotation(parseInt(e.target.value))
-						}
+						onSizeChange={(e) => {
+							setCheckeredSize(parseInt(e.target.value));
+							updateCheckeredSettings(
+								parseInt(e.target.value),
+								checkeredRotation
+							);
+						}}
+						onRotationChange={(e) => {
+							setCheckeredRotation(parseInt(e.target.value));
+							updateCheckeredSettings(
+								checkeredSize,
+								parseInt(e.target.value)
+							);
+						}}
 						onChangeComplete={handleCheckeredSettingsChange}
 					/>
 				);

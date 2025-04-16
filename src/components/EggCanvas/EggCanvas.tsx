@@ -193,7 +193,7 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 			colorScheme: typeof state.patternSettings.colorScheme;
 			size: number;
 			density: number;
-			rotation: number; // Ny parameter
+			rotation: number;
 		}
 	) => {
 		const { colorScheme, size, density, rotation } = options;
@@ -216,7 +216,7 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 		ctx.fillStyle = colorScheme.secondary;
 
 		for (
-			let x = centerX - width / 2;
+			let x = centerX - width * 0.7;
 			x < centerX + width * 0.7;
 			x += spacing
 		) {
@@ -354,8 +354,8 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 		// Rita rutmönster
 		for (
-			let x = centerX - width / 2 - tileSize; // Utöka området för att täcka kanter vid rotation
-			x < centerX + width / 2 + tileSize;
+			let x = centerX - width * 0.7 - tileSize; // Utöka området för att täcka kanter vid rotation
+			x < centerX + width * 0.7 + tileSize;
 			x += tileSize
 		) {
 			for (
