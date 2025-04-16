@@ -4,16 +4,20 @@ import SliderWithTooltipGroup from "../../SliderWithTooltipGroup";
 type DotSettingsProps = {
 	dotSize: number;
 	dotDensity: number;
+	dotRotation: number;
 	onSizeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onDensityChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onRotationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onChangeComplete: () => void;
 };
 
 const DotSettingsPanel = ({
 	dotSize,
 	dotDensity,
+	dotRotation,
 	onSizeChange,
 	onDensityChange,
+	onRotationChange,
 	onChangeComplete,
 }: DotSettingsProps) => {
 	return (
@@ -42,6 +46,18 @@ const DotSettingsPanel = ({
 					tooltipFormatter={(value) =>
 						`${(parseFloat(value.toString()) * 100).toFixed(0)}%`
 					}
+				/>
+
+				{/* Ny slider för rotation */}
+				<SliderWithTooltip
+					id="dotRotation"
+					label="Rotation"
+					min={0}
+					max={180}
+					value={dotRotation}
+					onChange={onRotationChange}
+					onChangeComplete={onChangeComplete}
+					tooltipFormatter={(value) => `${value}°`}
 				/>
 			</SliderWithTooltipGroup>
 		</div>

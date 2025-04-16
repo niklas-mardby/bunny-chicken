@@ -19,6 +19,7 @@ const PatternSelector = () => {
 	// Local state for pattern settings
 	const [dotSize, setDotSize] = useState(5);
 	const [dotDensity, setDotDensity] = useState(0.5);
+	const [dotRotation, setDotRotation] = useState(0);
 	const [stripeCount, setStripeCount] = useState(6);
 	const [stripeDirection, setStripeDirection] =
 		useState<StripeDirection>("horizontal");
@@ -30,6 +31,7 @@ const PatternSelector = () => {
 		if (design.patternSettings.dots) {
 			setDotSize(design.patternSettings.dots.size);
 			setDotDensity(design.patternSettings.dots.density);
+			setDotRotation(design.patternSettings.dots.rotation || 0);
 		}
 
 		if (design.patternSettings.stripes) {
@@ -49,7 +51,7 @@ const PatternSelector = () => {
 
 		// Initialize pattern settings if they don't exist
 		if (pattern === "dots" && !design.patternSettings.dots) {
-			updateDotSettings(dotSize, dotDensity);
+			updateDotSettings(dotSize, dotDensity, dotRotation);
 		} else if (pattern === "stripes" && !design.patternSettings.stripes) {
 			updateStripeSettings(stripeCount, stripeDirection, stripeStyle);
 		} else if (pattern === "checkered" && !design.patternSettings.checkered) {
@@ -59,7 +61,7 @@ const PatternSelector = () => {
 
 	// Update callbacks
 	const handleDotSettingsChange = () => {
-		updateDotSettings(dotSize, dotDensity);
+		updateDotSettings(dotSize, dotDensity, dotRotation);
 	};
 
 	const handleStripeSettingsChange = () => {
@@ -78,13 +80,18 @@ const PatternSelector = () => {
 					<DotSettingsPanel
 						dotSize={dotSize}
 						dotDensity={dotDensity}
+						dotRotation={dotRotation}
 						onSizeChange={(e) => setDotSize(parseInt(e.target.value))}
 						onDensityChange={(e) =>
 							setDotDensity(parseFloat(e.target.value))
 						}
+						onRotationChange={(e) =>
+							setDotRotation(parseInt(e.target.value))
+						}
 						onChangeComplete={handleDotSettingsChange}
 					/>
 				);
+
 			case "stripes":
 				return (
 					<StripeSettingsPanel

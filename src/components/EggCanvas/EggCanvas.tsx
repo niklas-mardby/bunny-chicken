@@ -145,11 +145,12 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 			case "dots":
 				if (patternSettings.dots) {
-					const { size, density } = patternSettings.dots;
+					const { size, density, rotation = 0 } = patternSettings.dots; // Default 0 om rotation saknas
 					drawDotPattern(ctx, centerX, centerY, width, height, {
 						colorScheme,
 						size,
 						density,
+						rotation,
 					});
 				}
 				break;
@@ -191,9 +192,10 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 			colorScheme: typeof state.patternSettings.colorScheme;
 			size: number;
 			density: number;
+			rotation: number; // Ny parameter
 		}
 	) => {
-		const { colorScheme, size, density } = options;
+		const { colorScheme, size, density, rotation } = options;
 		const dotRadius = size;
 		const spacing = dotRadius * 3 * (1 / density);
 
@@ -201,10 +203,22 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 		ctx.fillStyle = colorScheme.primary;
 		ctx.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 
+		// Spara canvas state innan rotation
+		ctx.save();
+
+		// Rotera canvas runt mittpunkten
+		ctx.translate(centerX, centerY);
+		ctx.rotate((rotation * Math.PI) / 180); // Konvertera grader till radianer
+		ctx.translate(-centerX, -centerY);
+
 		// Rita prickar
 		ctx.fillStyle = colorScheme.secondary;
 
-		for (let x = centerX - width / 2; x < centerX + width / 2; x += spacing) {
+		for (
+			let x = centerX - width / 2;
+			x < centerX + width * 0.7;
+			x += spacing
+		) {
 			for (
 				let y = centerY - height / 2;
 				y < centerY + height / 2;
@@ -215,6 +229,9 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 				ctx.fill();
 			}
 		}
+
+		// Återställ canvas state
+		ctx.restore();
 	};
 
 	// Rita rändermönster

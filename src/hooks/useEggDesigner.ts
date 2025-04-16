@@ -57,10 +57,10 @@ export const useEggDesigner = () => {
 
 	// Funktion för att uppdatera prickinställningar
 	const updateDotSettings = useCallback(
-		(size: number, density: number) => {
-			console.log("updateDotSettings called with:", size, density);
+		(size: number, density: number, rotation: number) => {
+			console.log("updateDotSettings called with:", size, density, rotation);
 			updatePatternSettings({
-				dots: { size, density },
+				dots: { size, density, rotation },
 			});
 		},
 		[updatePatternSettings]

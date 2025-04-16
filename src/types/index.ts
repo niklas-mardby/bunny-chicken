@@ -16,6 +16,7 @@ export interface ColorScheme {
 }
 
 // Interface för olika mönsterinställningar
+
 export interface PatternSettings {
 	pattern: Pattern;
 	colorScheme: ColorScheme;
@@ -23,6 +24,7 @@ export interface PatternSettings {
 	dots?: {
 		size: number;
 		density: number;
+		rotation: number; // Ny property för rotation (0-180 grader)
 	};
 	stripes?: {
 		count: number;
