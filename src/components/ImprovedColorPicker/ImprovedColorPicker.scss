@@ -122,10 +122,10 @@
 	&__palette {
 		display: grid;
 		grid-template-columns: repeat(
-			5,
+			9,
 			1fr
 		); // Minskat till 5 kolumner eftersom vi nu har en ruta bredvid
-		gap: 0.35rem; // Mindre mellanrum
+		gap: 0.5rem; // Mindre mellanrum
 		padding: 0.75rem;
 		background-color: $surface-color;
 		border-radius: $border-radius-medium;
