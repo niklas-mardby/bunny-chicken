@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import EggCanvas from "../../components/EggCanvas/EggCanvas";
 import { useShareLink } from "../../hooks/useShareLink";
 import { useEggDesign } from "../../context/EggDesignContext";
 import "./SharedView.scss";
 import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
+import { useEggDesigner } from "../../hooks/useEggDesigner";
 
-const SharedView: React.FC = () => {
+const SharedView = () => {
 	const { designHash } = useParams<{ designHash: string }>();
 	const { loadDesignFromHash } = useShareLink();
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [hasError, setHasError] = useState(false);
+	const { resetDesign } = useEggDesigner();
+	const navigate = useNavigate();
+
+	const handleCreateNew = () => {
+		resetDesign(); // Återställ designen först
+		navigate("/"); // Navigera sedan till startsidan
+	};
 
 	// Ladda designen baserat på hash-parametern
 	useEffect(() => {
@@ -43,9 +51,12 @@ const SharedView: React.FC = () => {
 					Vi kunde inte ladda påskägget. Länken kan vara felaktig eller
 					utgången.
 				</p>
-				<Link to="/" className="shared-view__home-link">
+				<button
+					onClick={handleCreateNew}
+					className="shared-view__create-link"
+				>
 					Skapa eget påskägg
-				</Link>
+				</button>
 			</div>
 		);
 	}
@@ -59,9 +70,12 @@ const SharedView: React.FC = () => {
 							<div className="shared-view__error-container">
 								<h3>Det gick inte att visa påskägget</h3>
 								<p>Det uppstod ett fel när påskägget skulle visas.</p>
-								<Link to="/" className="shared-view__create-link">
+								<button
+									onClick={handleCreateNew}
+									className="shared-view__create-link"
+								>
 									Skapa eget påskägg
-								</Link>
+								</button>
 							</div>
 						}
 					>
@@ -75,9 +89,12 @@ const SharedView: React.FC = () => {
 					</ErrorBoundary>
 
 					<div className="shared-view__actions">
-						<Link to="/" className="shared-view__create-link">
+						<button
+							onClick={handleCreateNew}
+							className="shared-view__create-link"
+						>
 							Skapa eget påskägg
-						</Link>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -86,7 +103,7 @@ const SharedView: React.FC = () => {
 };
 
 // Komponent för att visa påskhälsningen
-const MessageDisplay: React.FC = () => {
+const MessageDisplay = () => {
 	const { state: design } = useEggDesign();
 
 	if (!design.message) {
