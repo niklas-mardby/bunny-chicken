@@ -21,7 +21,7 @@ const PatternSelector = () => {
 	const [dotDensity, setDotDensity] = useState(0.5);
 	const [dotRotation, setDotRotation] = useState(0);
 	const [stripeCount, setStripeCount] = useState(6);
-	const [stripeRotation, setStripeRotation] = useState(0); // Ändrat från stripeDirection
+	const [stripeRotation, setStripeRotation] = useState(0);
 	const [stripeStyle, setStripeStyle] = useState<StripeStyle>("straight");
 	const [checkeredSize, setCheckeredSize] = useState(20);
 	const [checkeredRotation, setCheckeredRotation] = useState(0);

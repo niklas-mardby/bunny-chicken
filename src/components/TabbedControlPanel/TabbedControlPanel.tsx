@@ -67,7 +67,10 @@ const TabbedControlPanel = () => {
 			<div className="control-panel__actions">
 				<button
 					className="control-panel__reset-button"
-					onClick={resetDesign}
+					onClick={() => {
+						resetDesign();
+						setActiveTab(tabs[0].id);
+					}}
 				>
 					Börja om
 				</button>
