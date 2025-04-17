@@ -11,8 +11,8 @@ import { EggDesign, EggDesignAction, PatternSettings } from "../types";
 const initialPatternSettings: PatternSettings = {
 	pattern: "solid",
 	colorScheme: {
-		primary: "#FFB6C1", // Light pink (pastel)
-		secondary: "#ADD8E6", // Light blue (pastel)
+		primary: "#F896D8",
+		secondary: "#F15BB5",
 	},
 };
 
