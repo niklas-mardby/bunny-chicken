@@ -157,11 +157,19 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 
 			case "stripes":
 				if (patternSettings.stripes) {
-					const { count, rotation = 0, style } = patternSettings.stripes; // Ändrat från direction till rotation
+					const {
+						count,
+						rotation = 0,
+						width = 20,
+						position = 50,
+						style,
+					} = patternSettings.stripes;
 					drawStripePattern(ctx, centerX, centerY, width, height, {
 						colorScheme,
 						count,
 						rotation,
+						width,
+						position,
 						style,
 					});
 				}
@@ -245,87 +253,141 @@ const EggCanvas = ({ width = 300, height = 400 }: EggCanvasProps) => {
 		options: {
 			colorScheme: typeof state.patternSettings.colorScheme;
 			count: number;
-			rotation: number; // Ändrat från direction (string) till rotation (number)
+			rotation: number;
+			width: number; // Ny parameter för bredd
+			position: number; // Ny parameter för position
 			style: string;
 		}
 	) => {
-		const { colorScheme, count, rotation, style } = options;
-		const stripeWidth = width / count;
+		const {
+			colorScheme,
+			count,
+			rotation,
+			width: stripeWidth,
+			position,
+			style,
+		} = options;
+
+		// Konvertera position (1-100) till en offset
+		const positionOffset = ((position - 50) / 50) * (width * 10);
 
 		// Beräkna vinkeln från rotation (i grader)
 		const angle = (rotation * Math.PI) / 180; // Konvertera grader till radianer
 
 		ctx.save();
-		ctx.translate(centerX, centerY);
+		ctx.translate(centerX + positionOffset, centerY);
 		ctx.rotate(angle);
 
 		// Beräkna den maximala diagonalen för att säkerställa att hela ägget täcks vid alla rotationer
 		const diagonal = Math.sqrt(width * width + height * height);
-		const totalWidth = diagonal;
-		const totalHeight = diagonal;
 
-		// Rita ränder
-		for (let i = 0; i < count; i++) {
-			const startX = -totalWidth / 2 + i * stripeWidth;
-			const startY = -totalHeight / 2;
+		// Fyll hela ägget med primärfärgen först
+		ctx.fillStyle = colorScheme.primary;
+		ctx.fillRect(-diagonal / 2, -diagonal / 2, diagonal, diagonal);
 
-			ctx.fillStyle =
-				i % 2 === 0 ? colorScheme.primary : colorScheme.secondary;
+		// Rita ränder i sekundärfärgen
+		ctx.fillStyle = colorScheme.secondary;
+
+		// Bredden på varje rand baserat på inställningen
+		const actualStripeWidth = stripeWidth;
+
+		// Om count är 1, rita bara en rand i mitten
+		if (count === 1) {
+			const stripeX = -actualStripeWidth / 2;
+			const stripeY = -diagonal / 2;
 
 			if (style === "straight") {
-				// Raka ränder
-				ctx.fillRect(startX, startY, stripeWidth, totalHeight);
-			} else if (style === "zigzag" || style === "wavy") {
-				// Zigzag eller vågiga ränder
-				ctx.beginPath();
-				ctx.moveTo(startX, startY);
+				// Rita en rak rand
+				ctx.fillRect(stripeX, stripeY, actualStripeWidth, diagonal);
+			} else {
+				// Hantera andra stilar (zigzag, wavy)
+				drawStylizedStripe(
+					ctx,
+					stripeX,
+					stripeY,
+					actualStripeWidth,
+					diagonal,
+					style
+				);
+			}
+		} else {
+			// Om count är större än 1, rita flera ränder centrerat
+			const totalWidth =
+				count * actualStripeWidth + (count - 1) * actualStripeWidth;
+			const startX = -totalWidth / 2;
 
-				const amplitude = stripeWidth * 0.4;
-				const segments = 20;
-				const segmentHeight = totalHeight / segments;
+			for (let i = 0; i < count; i++) {
+				const stripeX = startX + i * 2 * actualStripeWidth;
+				const stripeY = -diagonal / 2;
 
-				for (let j = 0; j < segments; j++) {
-					const y = startY + j * segmentHeight;
-
-					if (style === "zigzag") {
-						// Zigzag
-						const x = j % 2 === 0 ? startX : startX + amplitude;
-						ctx.lineTo(x, y);
-					} else {
-						// Vågiga ränder
-						const x = startX + Math.sin((j * Math.PI) / 4) * amplitude;
-						ctx.lineTo(x, y);
-					}
+				if (style === "straight") {
+					// Rita en rak rand
+					ctx.fillRect(stripeX, stripeY, actualStripeWidth, diagonal);
+				} else {
+					// Hantera andra stilar (zigzag, wavy)
+					drawStylizedStripe(
+						ctx,
+						stripeX,
+						stripeY,
+						actualStripeWidth,
+						diagonal,
+						style
+					);
 				}
-
-				ctx.lineTo(startX, startY + totalHeight);
-				ctx.lineTo(startX + stripeWidth, startY + totalHeight);
-
-				// Rita tillbaka uppåt för att avsluta formen
-				for (let j = segments - 1; j >= 0; j--) {
-					const y = startY + j * segmentHeight;
-
-					if (style === "zigzag") {
-						const x =
-							j % 2 === 0
-								? startX + stripeWidth
-								: startX + stripeWidth + amplitude;
-						ctx.lineTo(x, y);
-					} else {
-						const x =
-							startX +
-							stripeWidth +
-							Math.sin((j * Math.PI) / 4) * amplitude;
-						ctx.lineTo(x, y);
-					}
-				}
-
-				ctx.closePath();
-				ctx.fill();
 			}
 		}
 
 		ctx.restore();
+	};
+
+	// Hjälpfunktion för att rita stiliserade ränder (zigzag eller vågiga)
+	const drawStylizedStripe = (
+		ctx: CanvasRenderingContext2D,
+		startX: number,
+		startY: number,
+		width: number,
+		height: number,
+		style: string
+	) => {
+		ctx.beginPath();
+		ctx.moveTo(startX, startY);
+
+		const amplitude = width * 0.4;
+		const segments = 20;
+		const segmentHeight = height / segments;
+
+		for (let j = 0; j < segments; j++) {
+			const y = startY + j * segmentHeight;
+
+			if (style === "zigzag") {
+				// Zigzag
+				const x = j % 2 === 0 ? startX : startX + amplitude;
+				ctx.lineTo(x, y);
+			} else {
+				// Vågiga ränder
+				const x = startX + Math.sin((j * Math.PI) / 4) * amplitude;
+				ctx.lineTo(x, y);
+			}
+		}
+
+		ctx.lineTo(startX, startY + height);
+		ctx.lineTo(startX + width, startY + height);
+
+		// Rita tillbaka uppåt för att avsluta formen
+		for (let j = segments - 1; j >= 0; j--) {
+			const y = startY + j * segmentHeight;
+
+			if (style === "zigzag") {
+				const x = j % 2 === 0 ? startX + width : startX + width + amplitude;
+				ctx.lineTo(x, y);
+			} else {
+				const x = startX + width + Math.sin((j * Math.PI) / 4) * amplitude;
+				ctx.lineTo(x, y);
+			}
+		}
+
+		ctx.closePath();
+		ctx.fill();
 	};
 
 	// Rita rutmönster

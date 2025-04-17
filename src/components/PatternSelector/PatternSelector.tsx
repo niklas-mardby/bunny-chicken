@@ -23,6 +23,8 @@ const PatternSelector = () => {
 	const [stripeCount, setStripeCount] = useState(6);
 	const [stripeRotation, setStripeRotation] = useState(0);
 	const [stripeStyle, setStripeStyle] = useState<StripeStyle>("straight");
+	const [stripeWidth, setStripeWidth] = useState(20); // Default bredd
+	const [stripePosition, setStripePosition] = useState(50); // Default position (centrerad)
 	const [checkeredSize, setCheckeredSize] = useState(20);
 	const [checkeredRotation, setCheckeredRotation] = useState(0);
 
@@ -38,6 +40,9 @@ const PatternSelector = () => {
 			setStripeCount(design.patternSettings.stripes.count);
 			setStripeRotation(design.patternSettings.stripes.rotation ?? 0);
 			setStripeStyle(design.patternSettings.stripes.style);
+			// Synka de nya inställningarna
+			setStripeWidth(design.patternSettings.stripes.width ?? 20);
+			setStripePosition(design.patternSettings.stripes.position ?? 50);
 		}
 
 		if (design.patternSettings.checkered) {
@@ -54,7 +59,14 @@ const PatternSelector = () => {
 		if (pattern === "dots" && !design.patternSettings.dots) {
 			updateDotSettings(dotSize, dotDensity, dotRotation);
 		} else if (pattern === "stripes" && !design.patternSettings.stripes) {
-			updateStripeSettings(stripeCount, stripeRotation, stripeStyle);
+			// Initiera med standardvärden för alla inställningar
+			updateStripeSettings(
+				1, // Börja med en rand som standard
+				0, // Ingen rotation
+				20, // Standard bredd
+				50, // Centrerad position
+				"straight" // Raka ränder som standard
+			);
 		} else if (pattern === "checkered" && !design.patternSettings.checkered) {
 			updateCheckeredSettings(checkeredSize, checkeredRotation);
 		}
@@ -66,7 +78,13 @@ const PatternSelector = () => {
 	};
 
 	const handleStripeSettingsChange = () => {
-		updateStripeSettings(stripeCount, stripeRotation, stripeStyle);
+		updateStripeSettings(
+			stripeCount,
+			stripeRotation,
+			stripeWidth,
+			stripePosition,
+			stripeStyle
+		);
 	};
 
 	const handleCheckeredSettingsChange = () => {
@@ -115,12 +133,16 @@ const PatternSelector = () => {
 					<StripeSettingsPanel
 						stripeCount={stripeCount}
 						stripeRotation={stripeRotation}
+						stripeWidth={stripeWidth}
+						stripePosition={stripePosition}
 						stripeStyle={stripeStyle}
 						onCountChange={(e) => {
 							setStripeCount(parseInt(e.target.value));
 							updateStripeSettings(
 								parseInt(e.target.value),
 								stripeRotation,
+								stripeWidth,
+								stripePosition,
 								stripeStyle
 							);
 						}}
@@ -129,12 +151,40 @@ const PatternSelector = () => {
 							updateStripeSettings(
 								stripeCount,
 								parseInt(e.target.value),
+								stripeWidth,
+								stripePosition,
+								stripeStyle
+							);
+						}}
+						onWidthChange={(e) => {
+							setStripeWidth(parseInt(e.target.value));
+							updateStripeSettings(
+								stripeCount,
+								stripeRotation,
+								parseInt(e.target.value),
+								stripePosition,
+								stripeStyle
+							);
+						}}
+						onPositionChange={(e) => {
+							setStripePosition(parseInt(e.target.value));
+							updateStripeSettings(
+								stripeCount,
+								stripeRotation,
+								stripeWidth,
+								parseInt(e.target.value),
 								stripeStyle
 							);
 						}}
 						onStyleChange={(style) => {
 							setStripeStyle(style);
-							updateStripeSettings(stripeCount, stripeRotation, style);
+							updateStripeSettings(
+								stripeCount,
+								stripeRotation,
+								stripeWidth,
+								stripePosition,
+								style
+							);
 						}}
 						onChangeComplete={handleStripeSettingsChange}
 					/>

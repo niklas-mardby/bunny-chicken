@@ -4,10 +4,14 @@ import SliderWithTooltipGroup from "../../SliderWithTooltipGroup";
 
 type StripeSettingsProps = {
 	stripeCount: number;
-	stripeRotation: number; // Ändrat från stripeDirection till stripeRotation
+	stripeRotation: number;
+	stripeWidth: number; // Ny prop för bredden på ränder
+	stripePosition: number; // Ny prop för position av ränder
 	stripeStyle: StripeStyle;
 	onCountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	onRotationChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Ändrat från onDirectionChange
+	onRotationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onWidthChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Ny handler för bredd
+	onPositionChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Ny handler för position
 	onStyleChange: (style: StripeStyle) => void;
 	onChangeComplete: () => void;
 };
@@ -15,9 +19,13 @@ type StripeSettingsProps = {
 const StripeSettingsPanel = ({
 	stripeCount,
 	stripeRotation,
+	stripeWidth,
+	stripePosition,
 	stripeStyle,
 	onCountChange,
 	onRotationChange,
+	onWidthChange,
+	onPositionChange,
 	onStyleChange,
 	onChangeComplete,
 }: StripeSettingsProps) => {
@@ -36,15 +44,36 @@ const StripeSettingsPanel = ({
 						<SliderWithTooltip
 							id="stripeCount"
 							label="Antal ränder"
-							min={2}
-							max={12}
+							min={1}
+							max={10}
 							value={stripeCount}
 							onChange={onCountChange}
 							onChangeComplete={onChangeComplete}
 							tooltipFormatter={(value) => `${value} st`}
 						/>
 
-						{/* Ny slider för rotation */}
+						<SliderWithTooltip
+							id="stripeWidth"
+							label="Bredd på ränder"
+							min={5}
+							max={50}
+							value={stripeWidth}
+							onChange={onWidthChange}
+							onChangeComplete={onChangeComplete}
+							tooltipFormatter={(value) => `${value}px`}
+						/>
+
+						<SliderWithTooltip
+							id="stripePosition"
+							label="Position"
+							min={1}
+							max={100}
+							value={stripePosition}
+							onChange={onPositionChange}
+							onChangeComplete={onChangeComplete}
+							tooltipFormatter={(value) => `${value}%`}
+						/>
+
 						<SliderWithTooltip
 							id="stripeRotation"
 							label="Rotation"

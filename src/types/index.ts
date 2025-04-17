@@ -25,8 +25,10 @@ export interface PatternSettings {
 		rotation: number; // Rotation (0-180 grader)
 	};
 	stripes?: {
-		count: number;
-		rotation: number; // Ny property för rotation (0-180 grader), ersätter direction
+		count: number; // Antal ränder (1-10)
+		rotation: number; // Rotation (0-180 grader)
+		width: number; // Ny property för bredd på ränderna
+		position: number; // Ny property för position (1-100, default 50)
 		style: StripeStyle;
 	};
 	checkered?: {

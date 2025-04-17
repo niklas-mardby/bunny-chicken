@@ -40,16 +40,23 @@ export const useEggDesigner = () => {
 
 	// Funktion för att uppdatera rändinställningar
 	const updateStripeSettings = useCallback(
-		(count: number, rotation: number, style: StripeStyle) => {
-			// Ändrat från direction till rotation
+		(
+			count: number,
+			rotation: number,
+			width: number,
+			position: number,
+			style: StripeStyle
+		) => {
 			console.log(
 				"updateStripeSettings called with:",
 				count,
-				rotation, // Ändrat från direction till rotation
+				rotation,
+				width,
+				position,
 				style
 			);
 			updatePatternSettings({
-				stripes: { count, rotation, style }, // Ändrat från direction till rotation
+				stripes: { count, rotation, width, position, style },
 			});
 		},
 		[updatePatternSettings]
