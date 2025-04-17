@@ -4,21 +4,61 @@ import "./ImprovedColorPicker.scss";
 
 // Fördefinierade pastellfärger (samma som tidigare)
 const PASTEL_COLORS = [
-	"#ffb6c1", // ljusrosa
-	"#add8e6", // ljusblå
-	"#b0e0e6", // puderblå
-	"#f5f5dc", // beige
-	"#ffffe0", // ljusgul
-	"#e6e6fa", // lavendel
-	"#d8bfd8", // tistel
-	"#dda0dd", // plommon
-	"#98fb98", // ljusgrön
-	"#ffdab9", // persika
-	"#afeeee", // turkos
-	"#ffa07a", // ljuskorall
-	"#f0e68c", // kaki
-	"#ffdead", // navajo vit
-	"#b0c4de", // ljus stålblå
+	// https://coolors.co/9b5de5-f15bb5-fee440-00bbf9-00f5d4
+	"#9B5DE5",
+	"#F15BB5",
+	"#72E1D1",
+	"#FEE440",
+	"#FC440F",
+	"#00bbf9",
+	"#00f5d4",
+	"#00FFF5",
+	"#644536",
+	// https://coolors.co/ff99c8-fcf6bd-d0f4de-a9def9-e4c1f9
+	"#A6DDAA",
+	"#fcf6bd",
+	"#E4C4B4",
+	"#d0f4de",
+	"#a9def9",
+	"#e4c1f9",
+	"#FD9BC5",
+	"#B6B67C",
+	// https://coolors.co/f94144-f3722c-f8961e-f9844a-f9c74f-90be6d-43aa8b-4d908e-277da1
+	"#f8961e",
+	"#f9844a",
+	"#f9c74f",
+	"#90be6d",
+	"#43aa8b",
+	"#4d908e",
+	"#277da1",
+	//
+	"#5C5552", // walnut brown
+	// purples
+	"#F7F0F5", // magnolia
+	"#EAD7E4", // pale purple
+	"#BF9BB8", // lilac
+	"#BEA7E5", // wisteria
+	"#985277", // magenta haze
+	"#5C374C", // eggplant
+	// greens
+	"#7DCE82", // mantis
+	"#76BC84", // emerald
+	"#4C9F70", // shamrock green
+	"#496F5D", // hookers green
+	// yellows
+	"#FFFD82", // icterine
+	// reds
+	"#ED6A5A", // bittersweet
+	"#F35B04", // persimmon (rödish)
+	// pinks
+	"#FFA0AC", // salmon pink
+	"#F896D8", // persian pink
+	"#FF006E", // rose
+	// blues
+	"#3A86FF", // azure
+	"#7678ED", // medium slate blue
+	"#3D348B", // tekhelet
+	"#04395E", // prussian blue
 ];
 
 // Interface för att spåra upp till 4 färger
